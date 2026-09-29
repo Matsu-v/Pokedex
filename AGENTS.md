@@ -102,3 +102,13 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 ## Lessons
 
 <!-- Grows per issue: things the agent got wrong or had to learn about this project. -->
+- **Figma type colours are not variables.** The chips on page *Types* only carry a raw fill on the
+  12px dot SVG. `get_variable_defs` returns `{}` there; download the dot SVGs from
+  `get_design_context` and read `fill=` instead. Page *Types* has all 18 types plus Unknown and Shadow.
+- **Figma icons as PNG:** `get_screenshot` does not upscale past the node size (24px stays 24px), and
+  there is no SVG rasterizer on this machine. The tab icons were rasterized with Python/PIL from the
+  SVG paths (black on transparent, `renderingMode="template"` tints them). Reuse that for new icons.
+- **Checking the app without a phone:** `npx expo start --web` hung on "Starting Metro Bundler" in the
+  preview pane. `CI=1 npx expo export --platform ios --platform android` proves it bundles, and
+  `--platform web` plus `python -m http.server` gives a page you can click through. On web
+  NativeTabs is a floating bar at the top; that is expo-router's web fallback, not a bug.
