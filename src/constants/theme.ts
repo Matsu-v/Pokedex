@@ -1,61 +1,70 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * All colours, spacing, radii and font sizes of the app. Values come from the course Figma file
+ * (fileKey yM5t2yGQQ279kiKIwfYyTH). No hex codes anywhere else.
  */
-
-import '@/global.css';
 
 import { Platform } from 'react-native';
 
-export const Colors = {
-  light: {
-    text: '#22303C',
-    background: '#F5F2EC',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
-    card: '#FFFFFF',
-    badge: '#2E7D5B',
-    badgeText: '#FFFFFF',
-  },
-  dark: {
-    text: '#22303C',
-    background: '#F5F2EC',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
-    card: '#FFFFFF',
-    badge: '#2E7D5B',
-    badgeText: '#FFFFFF',
-  },
+// Figma colour styles.
+const Palette = {
+  midnight: '#0E0940', // Primary/Midnight: text, inactive tab
+  purple: '#5631E8', // Primary/Purple: number badge, active tab
+  daylight: '#EDF6FF', // Primary/Daylight: screen background
+  white: '#FFFFFF',
+  artwork: '#F6F6FF', // artwork area behind the sprite on a Pokecard
 } as const;
 
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
+const light = {
+  text: Palette.midnight,
+  background: Palette.daylight,
+  card: Palette.white,
+  cardArtwork: Palette.artwork,
+  badge: Palette.purple,
+  badgeText: Palette.white,
+  tabActive: Palette.purple,
+  tabInactive: Palette.midnight,
+  // Menubar: Daylight at 50% with a 25px background blur.
+  tabBar: 'rgba(237, 246, 255, 0.5)',
+  // Type chip background: Midnight at 8%.
+  chip: 'rgba(14, 9, 64, 0.08)',
+};
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+export const Colors = {
+  light,
+  // Dark mode is issue #17; until then it matches light.
+  dark: light,
+} as const;
+
+export type ThemeColor = keyof typeof light;
+
+// "Soft shadow" effect style: 0 2 15 0, #303773 at 15%.
+export const Shadow = { soft: '0px 2px 15px 0px rgba(48, 55, 115, 0.15)' } as const;
+
+// Dot colours from the Type chips on page Types (447:2497).
+export const TypeColors = {
+  normal: '#9099A2',
+  fighting: '#CE3F6A',
+  flying: '#93A9E2',
+  poison: '#AB6AC8',
+  ground: '#D87645',
+  rock: '#C4BA85',
+  bug: '#8FBF2B',
+  ghost: '#546AA6',
+  steel: '#5A8FA1',
+  fire: '#FF4F68',
+  water: '#4D90D6',
+  grass: '#64BC55',
+  electric: '#FFCF00',
+  psychic: '#830CB9',
+  ice: '#7DE0D0',
+  dragon: '#0670BE',
+  dark: '#5C5262',
+  fairy: '#EB90E6',
+  unknown: '#B6B6B6',
+  shadow: '#5B5265',
+} as const;
+
+export type PokemonType = keyof typeof TypeColors;
 
 export const Spacing = {
   half: 2,
@@ -67,10 +76,8 @@ export const Spacing = {
   six: 64,
 } as const;
 
+export const Radius = { xs: 4, s: 8, m: 12, l: 16, pill: 99 } as const;
+
+export const FontSize = { tab: 10, badge: 10, body: 16, title: 24 } as const;
+
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
-export const MaxContentWidth = 800;
-
-export const Radius = { s: 8, m: 12, l: 16 } as const;
-
-// Colours the template used as loose hex codes.
-export const Brand = { link: '#3c87f7', splash: '#208AEF' } as const;
