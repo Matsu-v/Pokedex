@@ -112,3 +112,9 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   preview pane. `CI=1 npx expo export --platform ios --platform android` proves it bundles, and
   `--platform web` plus `python -m http.server` gives a page you can click through. On web
   NativeTabs is a floating bar at the top; that is expo-router's web fallback, not a bug.
+- **Check the branch base first.** A worktree can be created before the previous issue is merged; this
+  one started on the old starter while #1 was already on `origin/main`. `git fetch` and fast-forward
+  before planning, otherwise the plan is built on files that no longer exist.
+- **Checking pure code without a test runner:** Node 22 runs `.ts` directly (`node check.ts`). Copy the
+  files under test to the scratchpad and import them with a relative `./x.ts` path; the `@/` alias
+  does not resolve outside Metro. Works for `src/lib/` and for `src/data/pokeapi.ts` against the live API.
