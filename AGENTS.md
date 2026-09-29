@@ -65,6 +65,27 @@ course Figma file (link in `specs/product.md`); follow it strictly.
 - `npx expo lint` and `npx tsc --noEmit` must both be clean before a commit.
 - Add packages only with `npx expo install`, and only when the issue's plan names them.
 
+## Figma
+
+Working copy of the course design, readable with the Figma MCP: fileKey `yM5t2yGQQ279kiKIwfYyTH`
+([link](https://www.figma.com/design/yM5t2yGQQ279kiKIwfYyTH/Pokemon-Code-Challenge--Copy-)).
+Build from the **iOS** row of page *Mobile* (`0:1`), 390x844:
+
+| Screen | node |
+|---|---|
+| Splashscreen | `1:70` |
+| Home | `1:2` |
+| Search | `1:27` |
+| Detail (About / Stats / Evolution) | `1:15007`, `1:15159`, `1:15224` |
+| Detail - scroll | `1:3814` |
+| Favorites | `1:15076` |
+| Options | `15:4515` |
+
+Components on page *Components* (`1:13852`): Pokecard `1:14698`, Type chip `447:2508`, Tabs `1131:2631`,
+Menu `15:2827`. Type colours: page *Types* (`447:2497`). Icons: page *Icons* (`1:13808`), incl. Favorite,
+Share iOS/Android, Back, Search. Use `get_design_context` / `get_screenshot` on these ids; copy exact
+colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web, SmartTV and Tablet pages.
+
 ## Workflow: one issue per chat
 
 1. **Read** the issue and the spec it links to. Read the files the issue touches.

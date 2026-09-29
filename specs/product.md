@@ -3,7 +3,7 @@
 A Pokédex for Pokémon fans: browse every Pokémon, look one up, and keep your favourites on your phone.
 
 Route: **Pokédex** (starter route of the final assignment). Design: the course Figma file
-[Pokemon Code Challenge](https://www.figma.com/design/dsgGXcu5WELIvRW90m5308/Pokemon-Code-Challenge?node-id=0-1),
+[Pokemon Code Challenge](https://www.figma.com/design/dsgGXcu5WELIvRW90m5308/Pokemon-Code-Challenge?node-id=0-1) (working copy for the Figma MCP: fileKey `yM5t2yGQQ279kiKIwfYyTH`, see `AGENTS.md`),
 followed strictly.
 
 > The fixed spec list for this route (appendix A) is published on day 4. When it is out, every
