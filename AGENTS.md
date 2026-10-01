@@ -118,3 +118,14 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Checking pure code without a test runner:** Node 22 runs `.ts` directly (`node check.ts`). Copy the
   files under test to the scratchpad and import them with a relative `./x.ts` path; the `@/` alias
   does not resolve outside Metro. Works for `src/lib/` and for `src/data/pokeapi.ts` against the live API.
+- **Font is Rubik, loaded with `useFonts` in the root layout** (works in Expo Go and on web; the
+  config-plugin route needs a dev build and gives different family names per platform). Use
+  `Fonts.medium` etc. from `theme.ts` as `fontFamily` and set no `fontWeight`: on Android a weight
+  next to a custom family picks the wrong file.
+- **expo-image `transition` gets stuck on web:** the cross-dissolve stays at opacity 0 for most
+  images (the `<img>` loads, nothing shows). No fade on artwork; check web with
+  `getComputedStyle(img).opacity`, not only with `naturalWidth`.
+- **Clicking through a web export:** a synthetic `el.click()` does not fire a `Pressable`, and the
+  export strips `console.log`. Click with the browser tool by `ref` and record taps in a global
+  (`globalThis.taps`) in a temporary screen. Export to a new folder each time: the folder that
+  `http.server` is serving is locked on Windows.

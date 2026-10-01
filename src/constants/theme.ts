@@ -80,4 +80,25 @@ export const Radius = { xs: 4, s: 8, m: 12, l: 16, pill: 99 } as const;
 
 export const FontSize = { tab: 10, badge: 10, body: 16, title: 24 } as const;
 
+// Figma uses Rubik throughout. These are the names the fonts are registered under in the root
+// layout (useFonts). Set fontFamily only, no fontWeight: on Android a weight would pick another file.
+export const Fonts = {
+  regular: 'Rubik_400Regular',
+  medium: 'Rubik_500Medium',
+  bold: 'Rubik_700Bold',
+} as const;
+
+// Pokecard (1:14698), Row variant.
+export const Card = {
+  padding: 12, // footer around name and options icon
+  badgeOffset: 8, // badge from the top-left corner of the artwork
+  badgePadding: { top: 4, bottom: 2, horizontal: 6 },
+  nameLineHeight: 1.2,
+  icon: 24,
+  // Extra touch area around the 24px options icon, so the target is 44pt.
+  iconHitSlop: 10,
+  // Not in Figma: feedback while a finger is on the card or the icon.
+  pressedOpacity: 0.7,
+} as const;
+
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
