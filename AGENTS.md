@@ -153,3 +153,15 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   with flags in `sessionStorage`; that covers a slow or failing first load and next page. This is not
   the same as being offline on web: TanStack's `onlineManager` then pauses the query instead of failing
   it (read from the source, not run). React Native has no such event, so there the request fails.
+- **`ETARGET` on a version that exists:** after registry timeouts npm falls back to its stale cached
+  package list, which may not have the version yet. Check with `npm view <pkg>@<version>` and run the
+  same command again; it is not a version conflict, so no `--force`. `npx expo install --fix` also runs
+  in two rounds (first `expo`, then the rest), so a failed second round leaves `package.json` updated
+  and those packages not installed. Read the real exit code: `| tail` hides it.
+- **`expo install --fix` can leave a range behind.** A package that npm already moved along with `expo`
+  counts as fine, so its range stays old (`expo-constants` stayed `~57.0.19` with 57.0.22 installed).
+  `npx expo install <pkg>` brings the range in line.
+- **Check port 8081 before you scan.** An `expo start` from another worktree can still hold it, and its
+  QR code opens that branch. Use `--port 8082`. This PC has several network adapters, so set
+  `REACT_NATIVE_PACKAGER_HOSTNAME` to the LAN address, otherwise the QR code may point to an address
+  the phone cannot reach.
