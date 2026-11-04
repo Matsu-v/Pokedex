@@ -1,4 +1,3 @@
-import { Inter_400Regular } from '@expo-google-fonts/inter';
 import {
   Rubik_400Regular,
   Rubik_500Medium,
@@ -11,7 +10,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { Fonts, TitleFontUrl } from '@/constants/theme';
 import { queryClient } from '@/data/query-client';
 
 // Keep the splash screen up until the fonts are there, so text never jumps from the system font.
@@ -20,16 +18,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   // The keys match `Fonts` in theme.ts.
-  const [localFontsLoaded, localFontsError] = useFonts({
-    Rubik_400Regular,
-    Rubik_500Medium,
-    Rubik_700Bold,
-    Inter_400Regular,
-  });
-  // A separate call: without network on the first launch this one fails, but the others must finish.
-  const [titleFontLoaded, titleFontError] = useFonts({ [Fonts.title]: TitleFontUrl });
-  const ready =
-    (localFontsLoaded || localFontsError !== null) && (titleFontLoaded || titleFontError !== null);
+  const [fontsLoaded, fontError] = useFonts({ Rubik_400Regular, Rubik_500Medium, Rubik_700Bold });
+  const ready = fontsLoaded || fontError !== null;
 
   useEffect(() => {
     if (ready) SplashScreen.hide();

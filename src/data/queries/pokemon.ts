@@ -2,7 +2,7 @@
  * TanStack Query hooks for PokeAPI. Screens use these, never the fetch functions directly.
  */
 
-import { type InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { type InfiniteData, skipToken, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import {
   getEvolutionChain,
@@ -65,11 +65,13 @@ export function usePokemonSpecies(id: number) {
   });
 }
 
-/** Pass the chain id from the species (`idFromUrl(species.evolution_chain.url)`); waits while undefined. */
+/**
+ * Pass the chain id from the species (`idFromUrl(species.evolution_chain.url)`); waits while undefined.
+ * `refetch` only works once there is an id: while it waits there is nothing to run.
+ */
 export function useEvolutionChain(chainId: number | undefined) {
   return useQuery({
     queryKey: pokemonKeys.evolutionChain(chainId ?? 0),
-    queryFn: () => getEvolutionChain(chainId as number),
-    enabled: chainId !== undefined,
+    queryFn: chainId === undefined ? skipToken : () => getEvolutionChain(chainId),
   });
 }
