@@ -6,7 +6,7 @@ built with Expo, Expo Router, TanStack Query and SQLite.
 - What the app does: [`specs/product.md`](./specs/product.md), one spec per feature in [`specs/features/`](./specs/features/)
 - Instructions for the coding agent: [`AGENTS.md`](./AGENTS.md)
 - Work is split into [GitHub Issues](../../issues), each closed by a commit
-- Agent chats: [`chat-history/`](./chat-history/) · Explanation: [`docs/toelichting.md`](./docs/toelichting.md)
+- Agent chats: [`chat-history/`](./chat-history/) · Explanation: [`docs/explanation.md`](./docs/explanation.md)
 
 ## Run
 

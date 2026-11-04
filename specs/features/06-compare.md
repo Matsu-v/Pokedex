@@ -1,5 +1,7 @@
 # Feature 06: Compare
 
+Appendix A: **Compare (you design it)**.
+
 ## Goal
 
 The user picks two Pokémon and sees them side by side, with per stat who is stronger. This is the
@@ -17,8 +19,9 @@ feature of the Pokédex route that we design ourselves; there is no Figma screen
 - Below the stats: the total of all six, and a one-line verdict, e.g. "Charizard wins 4 of 6 stats".
 - The comparison logic is a pure function in `src/lib/`.
 - A **Swap** button swaps left and right.
+- Colours, sizes and fonts only from `src/constants/theme.ts`.
 
-## Acceptance criteria
+## Acceptance Criteria
 
 - [ ] From Charmander's Detail, Compare → pick Squirtle shows both with six stat rows.
 - [ ] Per row the higher value is highlighted; the verdict counts wins correctly.
@@ -26,6 +29,6 @@ feature of the Pokédex route that we design ourselves; there is no Figma screen
 - [ ] Each side has its own loading and error state.
 - [ ] Comparing a Pokémon with itself shows all stats equal and "It's a tie".
 
-## Out of scope
+## Out of Scope
 
 Comparing more than two. Type effectiveness or battle simulation.
