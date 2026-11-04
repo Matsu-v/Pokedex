@@ -1,6 +1,7 @@
 import {
   Rubik_400Regular,
   Rubik_500Medium,
+  Rubik_600SemiBold,
   Rubik_700Bold,
   useFonts,
 } from '@expo-google-fonts/rubik';
@@ -19,7 +20,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   // The keys match `Fonts` in theme.ts.
-  const [fontsLoaded, fontError] = useFonts({ Rubik_400Regular, Rubik_500Medium, Rubik_700Bold });
+  const [fontsLoaded, fontError] = useFonts({
+    Rubik_400Regular,
+    Rubik_500Medium,
+    Rubik_600SemiBold,
+    Rubik_700Bold,
+  });
   const ready = fontsLoaded || fontError !== null;
 
   useEffect(() => {
@@ -41,7 +47,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false, title: 'Pokémons' }} />
           {/* No header on Search, as in Figma: back is the iOS swipe or the Android back gesture. */}
           <Stack.Screen name="search" options={{ headerShown: false, title: 'Search' }} />
-          <Stack.Screen name="pokemon/[id]" options={{ title: 'Pokémon' }} />
+          {/* Detail draws its own top bar: a native header differs per platform and from Figma. */}
+          <Stack.Screen name="pokemon/[id]" options={{ headerShown: false, title: 'Pokémon' }} />
         </Stack>
       </ThemeProvider>
     </QueryClientProvider>

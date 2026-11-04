@@ -60,7 +60,8 @@ code. No library that needs a development build.
 
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
-`src/components/query-state.tsx`. Anything new that other features will use gets a line here.
+`src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`. Anything new that other
+features will use gets a line here.
 
 ## Rules
 
@@ -179,6 +180,18 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   middle of the bar, so click on the magnifier. A delay in the `fetch` wrapper needs at least 8 seconds:
   the browser tool is slow enough that a shorter one is over before the next step runs. `selectionColor`
   does nothing for the caret on web, so its colour can only be checked on a phone.
+- **Figma heights are not what the code output suggests.** A stroke in Figma lies inside the box, a React
+  Native border comes on top of it: padding 10 with a 2px line becomes padding 8 plus the border. Figma
+  also rounds text boxes (14 × 1.25 → 18), so with the exact line height rows drift away. Compare with
+  `get_metadata`, and measure the web export with `getBoundingClientRect`; on web only the 44px status
+  bar is missing from every `y`.
+- **An SF Symbol in Figma is a text node** (`chevron.left` on Detail), so it has no icon asset, and the
+  icon `Back` is a different shape. `download_assets` with `defaultFormat: 'svg'` on that text node gives
+  the outlined path, which can be rasterized like the other icons.
+- **`accessibilityState` does not reach the web.** `aria-selected` works on both web and native, so it can
+  be checked in a web export.
+- **A request that fires after a tap needs no change to `index.html`:** patch `window.fetch` with the
+  browser tool once the list has loaded, then tap. The `index.html` trick is only for the first request.
 - **Anything local needs `networkMode: 'always'`.** By default TanStack pauses queries and mutations
   while offline, also when they never touch the network. Tested on web: without it, tapping the heart
   while offline did nothing.

@@ -13,6 +13,7 @@ const Palette = {
   white: '#FFFFFF',
   black: '#000000', // search icon
   artwork: '#F6F6FF', // artwork area behind the sprite on a Pokecard
+  silver: '#DBDAE6', // Shades/Silver: line under an inactive tab on Detail
 } as const;
 
 const light = {
@@ -34,6 +35,11 @@ const light = {
   searchCaret: Palette.purple,
   // Search bar placeholder: black at 30%.
   placeholder: 'rgba(0, 0, 0, 0.3)',
+  // Detail: the lower part of the screen, and the back button that sits on daylight.
+  detailSheet: Palette.white,
+  backButton: Palette.black,
+  detailTabLineActive: Palette.purple,
+  detailTabLine: Palette.silver,
   // Not in Figma: loading and error states use the primary colour.
   spinner: Palette.purple,
   button: Palette.purple,
@@ -77,6 +83,13 @@ export const TypeColors = {
 
 export type PokemonType = keyof typeof TypeColors;
 
+const TypeColorByName: Record<string, string> = TypeColors;
+
+/** Dot colour for a type name from the API. A name we do not know gets the grey of Unknown. */
+export function typeColor(name: string): string {
+  return TypeColorByName[name] ?? TypeColors.unknown;
+}
+
 export const Spacing = {
   half: 2,
   one: 4,
@@ -89,13 +102,22 @@ export const Spacing = {
 
 export const Radius = { xs: 4, s: 8, m: 12, l: 16, pill: 99 } as const;
 
-export const FontSize = { tab: 10, badge: 10, body: 16, title: 24 } as const;
+export const FontSize = {
+  tab: 10,
+  badge: 10,
+  small: 14,
+  body: 16,
+  back: 17,
+  title: 24,
+  heading: 32,
+} as const;
 
 // These are the names the fonts are registered under in the root layout (useFonts). Set fontFamily
 // only, no fontWeight: on Android a weight would pick another file.
 export const Fonts = {
   regular: 'Rubik_400Regular',
   medium: 'Rubik_500Medium',
+  semibold: 'Rubik_600SemiBold',
   bold: 'Rubik_700Bold',
   // Figma has Cabinet Grotesk Extrabold here, but the course's font is Rubik.
   title: 'Rubik_700Bold',
@@ -135,6 +157,46 @@ export const Card = {
   icon: 24,
   // Extra touch area around the 24px options icon, so the target is 44pt.
   iconHitSlop: 10,
+  pressedOpacity: PressedOpacity,
+} as const;
+
+// Detail (1:15007).
+export const Detail = {
+  // Top bar: 40 high, 8 from the status bar and from the left and right edge.
+  barOffset: 8,
+  barHeight: 40,
+  // Extra touch area above and below the 40 high back button, so the target is at least 44pt.
+  backHitSlop: 2,
+  backPadding: { horizontal: 9, vertical: 8 },
+  backGap: 5,
+  chevron: { width: 18, height: 24 },
+  backLineHeight: 22,
+  backLetterSpacing: -0.408,
+  heartPadding: 8,
+  heartIcon: 24,
+  // The side margin, and the gap between all the blocks on the screen.
+  margin: 24,
+  // Line heights are the rounded heights Figma gives its text boxes: 32 × 1.2 → 38, 14 × 1.2 → 17,
+  // 14 × 1.25 → 18. With the exact values the rows drift away from the design.
+  titleLineHeight: 38,
+  numberOpacity: 0.3,
+  namesGap: 12,
+  chipGap: 8,
+  chipPadding: { left: 12, right: 14, vertical: 4 },
+  chipDot: 12,
+  chipLineHeight: 24,
+  artwork: 200,
+  // How much of the artwork lies on daylight; the rest hangs over the white part.
+  artworkOnDaylight: 150,
+  // Figma: bottom padding 10 with the line inside it. Here the line comes on top of the padding.
+  tabPadding: { top: 5, bottom: 8 },
+  tabLine: 2,
+  tabLineHeight: 17,
+  tabInactiveOpacity: 0.5,
+  aboutLabelWidth: 100,
+  aboutGap: 16,
+  aboutLineHeight: 18,
+  aboutValueOpacity: 0.65,
   pressedOpacity: PressedOpacity,
 } as const;
 
