@@ -17,7 +17,7 @@ The user sees everything about one Pokémon, as on the **Detail** screen in Figm
 - About: Name, ID, Base (base experience, `64 XP`), Weight (`6,9 kg`, the API gives hectograms),
   Height (`0,7 m`, the API gives decimetres), Types, Abilities.
 - Stats: HP, Attack, Defense, Special Attack, Special Defense, Speed, each with its value and a
-  bar. Bar width = value / 255.
+  bar. Bar width = value / 255. Figma's bars are longer, but they are sample data and follow no rule.
 - Evolution: the chain in order, each with artwork, number and name; tapping one opens it.
 - Unit conversions and chain flattening are pure functions in `src/lib/`.
 - Colours, sizes and fonts only from `src/constants/theme.ts`.

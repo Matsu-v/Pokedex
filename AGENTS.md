@@ -60,7 +60,8 @@ code. No library that needs a development build.
 
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
-`src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`. Anything new that other
+`src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`, stat names and bar widths
+`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts`. Anything new that other
 features will use gets a line here.
 
 ## Rules
@@ -195,3 +196,12 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Anything local needs `networkMode: 'always'`.** By default TanStack pauses queries and mutations
   while offline, also when they never touch the network. Tested on web: without it, tapping the heart
   while offline did nothing.
+- **Does a Figma value follow a rule? Work it out before you copy it.** The Stats bars look exact, but
+  they run from 2.26 to 3.00 px per point and Charmander's Speed says 50 where the API gives 65: sample
+  data, so value / 255 stays. Also add up the tallest tab against Figma's frame: Stats scrolled 10 px on
+  844 until the gap below it became Figma's 14 (`Detail.bottomGap`).
+- **Opening any route in a running web export:** `history.pushState({}, '', '/pokemon/242')` followed
+  by `dispatchEvent(new PopStateEvent('popstate', { state: {} }))`. This saves searching for a Pokémon
+  that is far down the list. Open `/` first: see the lesson on clean URLs.
+- **A screenshot right after a click can show the old frame.** The DOM had switched to Stats while the
+  screenshot still showed About. Wait a second, or measure with `getBoundingClientRect`.
