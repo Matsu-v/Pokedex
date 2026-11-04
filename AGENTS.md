@@ -143,3 +143,19 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   export strips `console.log`. Click with the browser tool by `ref` and record taps in a global
   (`globalThis.taps`) in a temporary screen. Export to a new folder each time: the folder that
   `http.server` is serving is locked on Windows.
+- **Read a font's licence before adding the file.** The Figma title font is Cabinet Grotesk (Fontshare,
+  not on Google Fonts); the name on Detail uses it too, at 32px. Its licence (ITF FFL, section 02) allows
+  embedding in an app but not making the file available through a repository or public server, and this
+  repo is public. So never commit that file: `useFonts` loads `TitleFontUrl` from Fontshare's CDN and
+  `expo-asset` caches it on the phone. The first launch needs network; without it the title falls back
+  to the system font. `@expo-google-fonts` packages are fine (SIL OFL).
+- **A worktree's `node_modules` goes stale.** After a fast-forward it can miss packages from earlier
+  issues (`@tanstack` was gone here, while `package.json` had it). Run `npm ci` before building.
+- **Keep room for the next-page spinner.** A footer that renders only while loading starts below the
+  edge of the screen when you are at the end of the list, so you never see it. `LoadMoreFooter` keeps
+  the space of the stopped spinner for as long as there is a next page.
+- **Testing failed requests in a web export:** the first request fires before the browser tool can
+  patch `fetch`. Put a `<script>` that wraps `fetch` at the top of `index.html` in the throwaway export,
+  with flags in `sessionStorage`; that covers a slow or failing first load and next page. This is not
+  the same as being offline on web: TanStack's `onlineManager` then pauses the query instead of failing
+  it (read from the source, not run). React Native has no such event, so there the request fails.

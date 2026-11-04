@@ -2,14 +2,16 @@
  * TanStack Query hooks for PokeAPI. Screens use these, never the fetch functions directly.
  */
 
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { type InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import {
   getEvolutionChain,
   getPokemon,
   getPokemonList,
   getPokemonSpecies,
+  type PokemonListResponse,
 } from '@/data/pokeapi';
+import { toListItem } from '@/lib/pokemon';
 
 const PAGE_SIZE = 20;
 // PokeAPI has no search endpoint; this limit returns the whole list (~1350) in one request.
@@ -23,7 +25,11 @@ export const pokemonKeys = {
   evolutionChain: (id: number) => ['pokemon', 'evolution-chain', id] as const,
 };
 
-/** The Pokémon list, 20 at a time. Call `fetchNextPage` to load more. */
+function flattenPages(data: InfiniteData<PokemonListResponse>) {
+  return data.pages.flatMap((page) => page.results.map(toListItem));
+}
+
+/** The Pokémon list as one flat array, 20 at a time. Call `fetchNextPage` to load more. */
 export function usePokemonList() {
   return useInfiniteQuery({
     queryKey: pokemonKeys.list,
@@ -31,6 +37,7 @@ export function usePokemonList() {
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastOffset) =>
       lastPage.next ? lastOffset + PAGE_SIZE : undefined,
+    select: flattenPages,
   });
 }
 

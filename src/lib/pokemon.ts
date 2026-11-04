@@ -15,6 +15,17 @@ export function idFromUrl(url: string): number {
   return match ? Number(match[1]) : NaN;
 }
 
+/** What a card needs from one entry of the list endpoint. */
+export type PokemonListItem = {
+  id: number;
+  name: string;
+};
+
+/** `{ name: 'pikachu', url: '…/pokemon/25/' }` → `{ id: 25, name: 'pikachu' }`. */
+export function toListItem({ name, url }: { name: string; url: string }): PokemonListItem {
+  return { id: idFromUrl(url), name };
+}
+
 /** Official artwork for a Pokémon id. The list endpoint has no images, so we build the URL. */
 export function artworkUrl(id: number): string {
   return `${ARTWORK_BASE}/${id}.png`;
