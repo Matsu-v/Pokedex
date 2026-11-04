@@ -41,13 +41,21 @@ export function usePokemonList() {
   });
 }
 
-/** Every Pokémon name and URL at once, for Search. Fetched once per app session. */
+function selectListItems(data: PokemonListResponse) {
+  return data.results.map(toListItem);
+}
+
+/**
+ * Every Pokémon at once, for Search. Fetched once per app session: `staleTime` alone is not enough,
+ * because the cache would still be dropped 5 minutes after leaving the screen.
+ */
 export function useAllPokemonNames() {
   return useQuery({
     queryKey: pokemonKeys.allNames,
     queryFn: () => getPokemonList(0, ALL_POKEMON_LIMIT),
-    select: (data) => data.results,
+    select: selectListItems,
     staleTime: Infinity,
+    gcTime: Infinity,
   });
 }
 
