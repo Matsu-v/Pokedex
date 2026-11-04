@@ -54,5 +54,5 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: SearchBarSize.pressedOpacity },
   icon: { width: SearchBarSize.icon, height: SearchBarSize.icon },
-  placeholder: { flex: 1, fontFamily: Fonts.input, fontSize: FontSize.body },
+  placeholder: { flex: 1, fontFamily: Fonts.regular, fontSize: FontSize.body },
 });

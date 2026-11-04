@@ -143,12 +143,11 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   export strips `console.log`. Click with the browser tool by `ref` and record taps in a global
   (`globalThis.taps`) in a temporary screen. Export to a new folder each time: the folder that
   `http.server` is serving is locked on Windows.
-- **Read a font's licence before adding the file.** The Figma title font is Cabinet Grotesk (Fontshare,
-  not on Google Fonts); the name on Detail uses it too, at 32px. Its licence (ITF FFL, section 02) allows
-  embedding in an app but not making the file available through a repository or public server, and this
-  repo is public. So never commit that file: `useFonts` loads `TitleFontUrl` from Fontshare's CDN and
-  `expo-asset` caches it on the phone. The first launch needs network; without it the title falls back
-  to the system font. `@expo-google-fonts` packages are fine (SIL OFL).
+- **Everything is in Rubik, also where Figma differs.** Figma has Cabinet Grotesk Extrabold for titles
+  (also the name on Detail, at 32px) and Inter in the search bar. The course's font is Rubik, so Mats
+  chose Rubik everywhere: use `Fonts.title` for titles and `Fonts.regular` for the search bar. Should
+  this change: Cabinet Grotesk's licence (ITF FFL, section 02) forbids the file in a public repo, so it
+  was loaded from Fontshare's CDN with `useFonts`; see commit c1d8a5b.
 - **A worktree's `node_modules` goes stale.** After a fast-forward it can miss packages from earlier
   issues (`@tanstack` was gone here, while `package.json` had it). Run `npm ci` before building.
 - **Keep room for the next-page spinner.** A footer that renders only while loading starts below the
