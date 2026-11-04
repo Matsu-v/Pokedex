@@ -165,3 +165,12 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   QR code opens that branch. Use `--port 8082`. This PC has several network adapters, so set
   `REACT_NATIVE_PACKAGER_HOSTNAME` to the LAN address, otherwise the QR code may point to an address
   the phone cannot reach.
+- **`expo-sqlite` and the web export:** without `assetExts.push('wasm')` in `metro.config.js` the web
+  export no longer bundles, and iOS and Android do not need it. The docs also ask for COOP/COEP headers,
+  but only the sync API uses `SharedArrayBuffer`: the async API we use runs fine on plain `http.server`.
+  The data lives in the browser's OPFS per origin, so a new port starts with an empty database.
+- **`http.server` has no clean URLs.** `/favorites` gives a 404 and `/favorites.html` matches no route,
+  which shows the not-found screen and React error #418. Open `/` and click the tab.
+- **Anything local needs `networkMode: 'always'`.** By default TanStack pauses queries and mutations
+  while offline, also when they never touch the network. Tested on web: without it, tapping the heart
+  while offline did nothing.
