@@ -1,4 +1,7 @@
-# Feature 05: Options and share
+# Optional: options sheet and share
+
+Not in appendix A, so not part of the required app. Issue #13. When it is built, move this file back
+to `specs/features/` and add it to `specs/product.md`. If it is not built, the ⋮ on the card is hidden.
 
 ## Goal
 
@@ -15,7 +18,7 @@ From any card, the user opens a menu to act on a Pokémon without opening it fir
 - The same Share action is also on the Detail screen.
 - Tapping the backdrop closes the sheet.
 
-## Acceptance criteria
+## Acceptance Criteria
 
 - [ ] ⋮ on a card in Browse, Search and Favorites opens the sheet for that Pokémon.
 - [ ] Open Pokémon opens its Detail screen and closes the sheet.
@@ -23,6 +26,6 @@ From any card, the user opens a menu to act on a Pokémon without opening it fir
 - [ ] Share opens the native share sheet with the text above.
 - [ ] Tapping the backdrop closes the sheet without an action.
 
-## Out of scope
+## Out of Scope
 
 Custom share images. Sharing to a specific app.

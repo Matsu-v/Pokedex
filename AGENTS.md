@@ -45,7 +45,12 @@ Docs: https://docs.expo.dev/eas/index.md
 # This project: Pokédex
 
 What the app does: `specs/product.md`. One spec per feature in `specs/features/`. The design is the
-course Figma file (link in `specs/product.md`); follow it strictly.
+course Figma file (link in `specs/product.md`); follow it closely. The course's requirements are in
+`exam/README.md` of the course repo, appendix A for this route. `specs/optional/` is only built when
+the user asks for it.
+
+The app must run in **Expo Go**: the teacher clones the repo, runs `npx expo start` and scans the QR
+code. No library that needs a development build.
 
 ## Structure: UI, data and logic are not mixed
 
@@ -56,12 +61,17 @@ course Figma file (link in `specs/product.md`); follow it strictly.
   TanStack Query hooks that screens use.
 - `src/lib/`: pure functions (formatting, unit conversion, filtering, comparing). No React, no imports
   from `src/data/`.
-- `src/constants/theme.ts`: the only place for colours, spacing, radii and font sizes. No hex codes elsewhere.
+- `src/constants/theme.ts`: the only place for colours, spacing, radii, font sizes and fonts. No hex codes elsewhere.
+
+Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
+`src/data/query-client.ts`, database `src/data/db.ts`. Anything new that other features will use gets
+a line here.
 
 ## Rules
 
 - Every query on screen has a loading state and an error state with a **Try again** button.
-- Types for API responses live in `src/data/pokeapi.ts`. No `any`.
+- Types for API responses live in `src/data/pokeapi.ts`. No `any`, no `as` casts (`as const` is fine), no `@ts-ignore`, no `console.log`.
+- Fonts come from `Fonts` in `theme.ts`, loaded with Expo Font. The course's font is Rubik; no new font family without asking.
 - `npx expo lint` and `npx tsc --noEmit` must both be clean before a commit.
 - Add packages only with `npx expo install`, and only when the issue's plan names them.
 
@@ -89,19 +99,23 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 ## Workflow: one issue per chat
 
 1. **Read** the issue and the spec it links to. Read the files the issue touches.
-2. **Plan**: post a plan and a task list as a comment on the issue
+2. **Plan**: post a plan and a `- [ ]` task list as one comment on the issue
    (`gh issue comment <n> --body-file <file>`). Files to touch, approach, risks. Then **stop and wait**
    for the user to approve it in the chat.
-3. **Build** the task list, one item at a time.
+3. **Build** the task list, one item at a time, and tick off each task in that comment
+   (`gh issue comment <n> --edit-last --body-file <file>`).
 4. **Check**: lint and typecheck clean; walk through every acceptance criterion of the issue and say
    per criterion how it was verified.
 5. **Explain** in the chat what changed and why, in a few lines, so the user can explain it too.
+   When the user rejected or changed a suggestion, say so plainly: `docs/explanation.md` asks for one.
 6. **Commit and push**: message `<short summary> (closes #<n>)`. Never force-push, never squash.
 7. **Learn**: anything that surprised you or went wrong goes under *Lessons* below, in the same commit.
 
 ## Lessons
 
 <!-- Grows per issue: things the agent got wrong or had to learn about this project. -->
+- **Lint reports unresolved modules after an install?** `npx expo lint` can read a stale cache from
+  `.expo/cache/eslint`. Check with `npx expo lint --no-cache` before looking for a real problem.
 - **Figma type colours are not variables.** The chips on page *Types* only carry a raw fill on the
   12px dot SVG. `get_variable_defs` returns `{}` there; download the dot SVGs from
   `get_design_context` and read `fill=` instead. Page *Types* has all 18 types plus Unknown and Shadow.
