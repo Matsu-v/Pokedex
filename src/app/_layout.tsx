@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
+import { prepareDatabase } from '@/data/db';
 import { queryClient } from '@/data/query-client';
 
 // Keep the splash screen up until the fonts are there, so text never jumps from the system font.
@@ -24,6 +25,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (ready) SplashScreen.hide();
   }, [ready]);
+
+  // In an effect, not at module level: the static web export also runs this module in Node.
+  useEffect(prepareDatabase, []);
 
   // A font error is not fatal: the app falls back to the system font.
   if (!ready) return null;
