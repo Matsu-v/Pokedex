@@ -8,6 +8,7 @@ import { AboutTab } from '@/components/about-tab';
 import { DetailTabs, type DetailTab } from '@/components/detail-tabs';
 import { DetailTopBar } from '@/components/detail-top-bar';
 import { ErrorState, LoadingState } from '@/components/query-state';
+import { StatsTab } from '@/components/stats-tab';
 import { TypeChip } from '@/components/type-chip';
 import { Detail, FontSize, Fonts } from '@/constants/theme';
 import type { Pokemon } from '@/data/pokeapi';
@@ -63,7 +64,7 @@ function DetailContent({ pokemon }: { pokemon: Pokemon }) {
       <View
         style={[
           styles.sheet,
-          { backgroundColor: theme.detailSheet, paddingBottom: insets.bottom + Detail.margin },
+          { backgroundColor: theme.detailSheet, paddingBottom: insets.bottom + Detail.bottomGap },
         ]}>
         {/* In the white part with a negative margin, so it paints over the daylight above it. */}
         <Image
@@ -74,8 +75,9 @@ function DetailContent({ pokemon }: { pokemon: Pokemon }) {
         />
         <DetailTabs active={tab} onChange={setTab} />
         <View style={styles.tabContent}>
-          {/* Stats is issue #7, Evolution is issue #8. */}
+          {/* Evolution is issue #8. */}
           {tab === 'about' && <AboutTab pokemon={pokemon} />}
+          {tab === 'stats' && <StatsTab pokemon={pokemon} />}
         </View>
       </View>
     </ScrollView>

@@ -14,6 +14,7 @@ const Palette = {
   black: '#000000', // search icon
   artwork: '#F6F6FF', // artwork area behind the sprite on a Pokecard
   silver: '#DBDAE6', // Shades/Silver: line under an inactive tab on Detail
+  grey: '#F3F3F7', // Shades/Grey: empty part of a stat bar on Detail
 } as const;
 
 const light = {
@@ -40,6 +41,8 @@ const light = {
   backButton: Palette.black,
   detailTabLineActive: Palette.purple,
   detailTabLine: Palette.silver,
+  detailStatBar: Palette.purple,
+  detailStatTrack: Palette.grey,
   // Not in Figma: loading and error states use the primary colour.
   spinner: Palette.purple,
   button: Palette.purple,
@@ -197,6 +200,13 @@ export const Detail = {
   aboutGap: 16,
   aboutLineHeight: 18,
   aboutValueOpacity: 0.65,
+  statsGap: 24,
+  statLineHeight: 18,
+  statValueOpacity: 0.65,
+  statBarGap: 7,
+  statBarHeight: 4,
+  // Below the last stat, above the home indicator (796 to 810): Stats just fits on Figma's 844.
+  bottomGap: 14,
   pressedOpacity: PressedOpacity,
 } as const;
 

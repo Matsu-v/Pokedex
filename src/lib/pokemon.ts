@@ -77,3 +77,16 @@ export function formatBaseExperience(experience: number | null): string {
 export function formatAbility(name: string): string {
   return name.split('-').map(capitalize).join(' ');
 }
+
+/** "hp" → "HP", "special-attack" → "Special Attack". */
+export function formatStatName(name: string): string {
+  return name === 'hp' ? 'HP' : formatAbility(name);
+}
+
+/** The highest base stat in the API: a bar with this value is full. */
+const MAX_BASE_STAT = 255;
+
+/** Width of a stat bar as a percentage of its track: 51 → "20%". */
+export function statBarWidth(baseStat: number): `${number}%` {
+  return `${(baseStat / MAX_BASE_STAT) * 100}%`;
+}
