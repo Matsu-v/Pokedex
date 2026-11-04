@@ -81,7 +81,8 @@ async function request<T>(path: string): Promise<T> {
   if (!response.ok) {
     throw new Error(`PokeAPI ${path} failed with status ${response.status}`);
   }
-  return (await response.json()) as T;
+  // `json()` returns `any`, which fits any `T`: the shape is trusted, not checked at runtime.
+  return response.json();
 }
 
 /** One page of the Pokémon list, in number order. */
