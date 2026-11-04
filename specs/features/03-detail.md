@@ -11,8 +11,8 @@ The user sees everything about one Pokémon, as on the **Detail** screen in Figm
 - Route `src/app/pokemon/[id].tsx`, opened from Browse, Search, Favorites and the evolution chain.
   Data from `/pokemon/{id}`; Evolution also from `/pokemon-species/{id}` → `evolution_chain.url` →
   `/evolution-chain/{id}`.
-- Header: back arrow, heart (feature 04), name, number (`001`), type chips with a coloured dot
-  (colour per type from the theme), large artwork on a light background.
+- Header: back arrow with the label "Vorige" as in Figma, heart (feature 04), name, number (`#001`),
+  type chips with a coloured dot (colour per type from the theme), large artwork on a light background.
 - Three tabs under the artwork: **About**, **Stats**, **Evolution**. Tabs are local state, not routes.
 - About: Name, ID, Base (base experience, `64 XP`), Weight (`6,9 kg`, the API gives hectograms),
   Height (`0,7 m`, the API gives decimetres), Types, Abilities.

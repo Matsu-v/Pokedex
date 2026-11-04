@@ -52,3 +52,28 @@ export function formatNumber(id: number): string {
 export function capitalize(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
+
+/** One decimal with a comma. Not `toLocaleString`, so the phone's language does not change it. */
+function formatDecimal(value: number): string {
+  return value.toFixed(1).replace('.', ',');
+}
+
+/** The API gives hectograms: 69 → "6,9 kg". */
+export function formatWeight(hectograms: number): string {
+  return `${formatDecimal(hectograms / 10)} kg`;
+}
+
+/** The API gives decimetres: 7 → "0,7 m". */
+export function formatHeight(decimetres: number): string {
+  return `${formatDecimal(decimetres / 10)} m`;
+}
+
+/** 64 → "64 XP". Some special forms have no value in the API: then a dash. */
+export function formatBaseExperience(experience: number | null): string {
+  return experience === null ? '–' : `${experience} XP`;
+}
+
+/** "overgrow" → "Overgrow", "solar-power" → "Solar Power". */
+export function formatAbility(name: string): string {
+  return name.split('-').map(capitalize).join(' ');
+}
