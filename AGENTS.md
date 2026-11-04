@@ -59,8 +59,8 @@ code. No library that needs a development build.
 - `src/constants/theme.ts`: the only place for colours, spacing, radii, font sizes and fonts. No hex codes elsewhere.
 
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
-`src/data/query-client.ts`, database `src/data/db.ts`. Anything new that other features will use gets
-a line here.
+`src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
+`src/components/query-state.tsx`. Anything new that other features will use gets a line here.
 
 ## Rules
 
@@ -171,6 +171,14 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   The data lives in the browser's OPFS per origin, so a new port starts with an empty database.
 - **`http.server` has no clean URLs.** `/favorites` gives a 404 and `/favorites.html` matches no route,
   which shows the not-found screen and React error #418. Open `/` and click the tab.
+- **"Can't perform a React state update on a component that hasn't mounted yet" at start on Android** is
+  an open bug in expo-router, not our code: [expo/expo#50282](https://github.com/expo/expo/issues/50282).
+  It is a race, so it comes and goes (about 1 launch in 4 on an empty template), and only in development.
+  The tell is `useLinking.native.js:127` in the stack. iOS has a synchronous path and does not get it.
+- **Web click-through, the Home search bar:** the floating tab bar of the web fallback lies over the
+  middle of the bar, so click on the magnifier. A delay in the `fetch` wrapper needs at least 8 seconds:
+  the browser tool is slow enough that a shorter one is over before the next step runs. `selectionColor`
+  does nothing for the caret on web, so its colour can only be checked on a phone.
 - **Anything local needs `networkMode: 'always'`.** By default TanStack pauses queries and mutations
   while offline, also when they never touch the network. Tested on web: without it, tapping the heart
   while offline did nothing.

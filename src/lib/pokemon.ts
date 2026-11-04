@@ -26,6 +26,18 @@ export function toListItem({ name, url }: { name: string; url: string }): Pokemo
   return { id: idFromUrl(url), name };
 }
 
+/**
+ * The Pokémon whose name contains the text (any case) or whose number equals it (`4`, `004`).
+ * Empty text finds nothing. The result keeps the order of `items`.
+ */
+export function filterPokemon(items: PokemonListItem[], text: string): PokemonListItem[] {
+  const query = text.trim().toLowerCase();
+  if (query === '') return [];
+
+  const number = /^\d+$/.test(query) ? Number(query) : null;
+  return items.filter((item) => item.name.includes(query) || item.id === number);
+}
+
 /** Official artwork for a Pokémon id. The list endpoint has no images, so we build the URL. */
 export function artworkUrl(id: number): string {
   return `${ARTWORK_BASE}/${id}.png`;

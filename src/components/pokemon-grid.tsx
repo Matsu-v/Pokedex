@@ -59,6 +59,9 @@ export function PokemonGrid({
       contentContainerStyle={styles.content}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
+      // With the keyboard up, the first tap on a card would otherwise only close the keyboard.
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
     />
   );
 }

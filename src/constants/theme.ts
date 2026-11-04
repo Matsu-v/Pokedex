@@ -30,6 +30,8 @@ const light = {
   chip: 'rgba(14, 9, 64, 0.08)',
   searchBar: Palette.white,
   searchIcon: Palette.black,
+  searchText: Palette.black,
+  searchCaret: Palette.purple,
   // Search bar placeholder: black at 30%.
   placeholder: 'rgba(0, 0, 0, 0.3)',
   // Not in Figma: loading and error states use the primary colour.

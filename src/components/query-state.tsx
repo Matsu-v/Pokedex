@@ -31,6 +31,17 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
   );
 }
 
+/** A message instead of content, such as an empty result: takes the whole space of the content. */
+export function MessageState({ message }: { message: string }) {
+  const theme = useTheme();
+
+  return (
+    <View style={styles.center}>
+      <Text style={[styles.message, { color: theme.text }]}>{message}</Text>
+    </View>
+  );
+}
+
 type LoadMoreFooterProps = {
   isLoading: boolean;
   isError: boolean;

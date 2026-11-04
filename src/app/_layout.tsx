@@ -39,7 +39,8 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerBackButtonDisplayMode: 'minimal' }}>
           {/* The title is what a screen reader says for the back button on the pushed screens. */}
           <Stack.Screen name="(tabs)" options={{ headerShown: false, title: 'Pokémons' }} />
-          <Stack.Screen name="search" options={{ title: 'Search' }} />
+          {/* No header on Search, as in Figma: back is the iOS swipe or the Android back gesture. */}
+          <Stack.Screen name="search" options={{ headerShown: false, title: 'Search' }} />
           <Stack.Screen name="pokemon/[id]" options={{ title: 'Pokémon' }} />
         </Stack>
       </ThemeProvider>

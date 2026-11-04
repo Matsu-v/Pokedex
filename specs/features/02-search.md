@@ -13,7 +13,9 @@ The user finds a Pokémon by typing (part of) its name or its number, as on the 
   `staleTime`) and filter it on the phone.
 - The filter is a pure function in `src/lib/`, so it can be checked without UI.
 - Matches on: name contains the text (case-insensitive), or the number equals the text (`4`, `004`).
-- Results use the same card as Browse. Keyboard opens automatically, back arrow returns to Home.
+- Results use the same card as Browse. Keyboard opens automatically.
+- No back arrow and no header, because Figma has none on this screen. The iOS swipe and the Android
+  back gesture or button return to Home.
 - Debounce the input by ~250 ms.
 - Colours, sizes and fonts only from `src/constants/theme.ts`.
 
@@ -21,7 +23,7 @@ The user finds a Pokémon by typing (part of) its name or its number, as on the 
 
 - [ ] "pika", "PIKA" and "Pika" all find Pikachu.
 - [ ] A Pokémon that has not been scrolled to in Browse is found too ("mewtwo" right after starting the app).
-- [ ] "Ch" shows Charmander, Charmeleon, Charizard, Chikorita … in number order.
+- [ ] "Ch" shows Charmander, Charmeleon, Charizard, Pikachu … in number order.
 - [ ] "25" shows Pikachu.
 - [ ] Results show while typing, on the same cards as Browse.
 - [ ] Empty field shows no results and no error.
