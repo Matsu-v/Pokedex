@@ -95,11 +95,15 @@ export const Fonts = {
   regular: 'Rubik_400Regular',
   medium: 'Rubik_500Medium',
   bold: 'Rubik_700Bold',
-  // Figma has Cabinet Grotesk Extrabold, but its licence does not allow the file in a public repo.
-  title: 'Rubik_700Bold',
+  title: 'CabinetGrotesk_800ExtraBold',
   // Text in the search bar.
   input: 'Inter_400Regular',
 } as const;
+
+// Cabinet Grotesk Extrabold, from Fontshare's own CDN (api.fontshare.com/v2/css?f[]=cabinet-grotesk@800).
+// Its licence does not allow the file in a public repo. The phone caches it after the first download.
+export const TitleFontUrl =
+  'https://cdn.fontshare.com/wf/ZX6AQLSFYVDPN2URWO2MQFGTYYOHIS64/TPYPKOYWFQVNJHLLRXD4KFYX4LUOUW4Z/6QH2ALVTTK7IRVO5MYOQQ3OZNXW5SSS3.ttf';
 
 // Screen title ("All Pokémon", 1:5).
 export const ScreenTitle = {
