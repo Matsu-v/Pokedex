@@ -61,7 +61,8 @@ code. No library that needs a development build.
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
 `src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`, stat names and bar widths
-`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts`. Anything new that other
+`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts`, Pokecard variants `PokemonCard` (Row) and
+`PokemonListCard` (List) in `src/components/pokemon-card.tsx`. Anything new that other
 features will use gets a line here.
 
 ## Rules
@@ -204,4 +205,10 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   by `dispatchEvent(new PopStateEvent('popstate', { state: {} }))`. This saves searching for a Pokémon
   that is far down the list. Open `/` first: see the lesson on clean URLs.
 - **A screenshot right after a click can show the old frame.** The DOM had switched to Stats while the
-  screenshot still showed About. Wait a second, or measure with `getBoundingClientRect`.
+  screenshot still showed About. Wait a second, or measure with `getBoundingClientRect`. Reading the DOM
+  in the same batch as the click can be too early as well: a spinner after Try again looked absent until
+  a one-second wait was added.
+- **Add up Figma's bottom per tab, it is not one rule.** Stats ends 14 above the home indicator, the last
+  card on Evolution runs 8 into it (26 from the edge). `insets.bottom + 14` looked the same at rest and
+  scrolled 22 px on 844; Mats follows Figma, so Evolution has its own padding. An inset above Figma's 34
+  is a row of Android buttons, and the card stays above that.

@@ -7,14 +7,15 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AboutTab } from '@/components/about-tab';
 import { DetailTabs, type DetailTab } from '@/components/detail-tabs';
 import { DetailTopBar } from '@/components/detail-top-bar';
+import { EvolutionTab } from '@/components/evolution-tab';
 import { ErrorState, LoadingState } from '@/components/query-state';
 import { StatsTab } from '@/components/stats-tab';
 import { TypeChip } from '@/components/type-chip';
-import { Detail, FontSize, Fonts } from '@/constants/theme';
+import { Detail, evolutionBottomPadding, FontSize, Fonts } from '@/constants/theme';
 import type { Pokemon } from '@/data/pokeapi';
-import { usePokemon } from '@/data/queries/pokemon';
+import { useEvolutionStages, usePokemon } from '@/data/queries/pokemon';
 import { useTheme } from '@/hooks/use-theme';
-import { artworkUrl, capitalize, formatNumber } from '@/lib/pokemon';
+import { artworkUrl, capitalize, formatNumber, idFromUrl } from '@/lib/pokemon';
 
 export default function PokemonDetailScreen() {
   const theme = useTheme();
@@ -64,7 +65,13 @@ function DetailContent({ pokemon }: { pokemon: Pokemon }) {
       <View
         style={[
           styles.sheet,
-          { backgroundColor: theme.detailSheet, paddingBottom: insets.bottom + Detail.bottomGap },
+          {
+            backgroundColor: theme.detailSheet,
+            paddingBottom:
+              tab === 'evolution'
+                ? evolutionBottomPadding(insets.bottom)
+                : insets.bottom + Detail.bottomGap,
+          },
         ]}>
         {/* In the white part with a negative margin, so it paints over the daylight above it. */}
         <Image
@@ -75,13 +82,31 @@ function DetailContent({ pokemon }: { pokemon: Pokemon }) {
         />
         <DetailTabs active={tab} onChange={setTab} />
         <View style={styles.tabContent}>
-          {/* Evolution is issue #8. */}
           {tab === 'about' && <AboutTab pokemon={pokemon} />}
           {tab === 'stats' && <StatsTab pokemon={pokemon} />}
+          {tab === 'evolution' && <EvolutionSection pokemon={pokemon} />}
         </View>
       </View>
     </ScrollView>
   );
+}
+
+/** Rendered only on its own tab, so the chain loads when the tab opens and an error stays in the tab. */
+function EvolutionSection({ pokemon }: { pokemon: Pokemon }) {
+  // Not `pokemon.id`: a form such as Charizard Mega X (10034) belongs to species 6.
+  const { stages, isPending, refetch } = useEvolutionStages(idFromUrl(pokemon.species.url));
+
+  if (stages) {
+    return (
+      <EvolutionTab
+        stages={stages}
+        currentId={pokemon.id}
+        onPressItem={(id) => router.push(`/pokemon/${id}`)}
+      />
+    );
+  }
+  if (isPending) return <LoadingState />;
+  return <ErrorState message="Could not load the evolution chain." onRetry={refetch} />;
 }
 
 const styles = StyleSheet.create({
@@ -123,5 +148,6 @@ const styles = StyleSheet.create({
     marginTop: -Detail.artworkOnDaylight,
     marginBottom: Detail.margin,
   },
-  tabContent: { marginTop: Detail.margin },
+  // Grows, so the loading, error and message states centre in the rest of the white part.
+  tabContent: { flexGrow: 1, marginTop: Detail.margin },
 });
