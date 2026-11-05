@@ -43,6 +43,8 @@ const light = {
   detailTabLine: Palette.silver,
   detailStatBar: Palette.purple,
   detailStatTrack: Palette.grey,
+  // Dotted line between the stages of an evolution chain: Midnight at 30%.
+  detailEvolutionLine: 'rgba(14, 9, 64, 0.3)',
   // Not in Figma: loading and error states use the primary colour.
   spinner: Palette.purple,
   button: Palette.purple,
@@ -161,6 +163,10 @@ export const Card = {
   // Extra touch area around the 24px options icon, so the target is 44pt.
   iconHitSlop: 10,
   pressedOpacity: PressedOpacity,
+  // List variant (1:14699): the artwork sets the height of the card. Figma rounds the name's box to 19.
+  listArtwork: 80,
+  listGap: 8,
+  listNameLineHeight: 19,
 } as const;
 
 // Detail (1:15007).
@@ -205,9 +211,26 @@ export const Detail = {
   statValueOpacity: 0.65,
   statBarGap: 7,
   statBarHeight: 4,
+  // Between all cards and lines of the evolution chain (1:15252).
+  evolutionGap: 12,
+  // The line from Figma's SVG: a short dash at both ends and a long one in the middle, centred on
+  // the artwork of the card.
+  evolutionLine: { width: 80, height: 14, stroke: 2, endDash: 1.75, middleDash: 3.5 },
+  // Below the last card, measured from the edge of the screen (818 to 844).
+  evolutionBottomGap: 26,
+  // Height of the home indicator area in Figma (810 to 844).
+  homeIndicatorArea: 34,
   // Below the last stat, above the home indicator (796 to 810): Stats just fits on Figma's 844.
   bottomGap: 14,
   pressedOpacity: PressedOpacity,
 } as const;
+
+/**
+ * Space below the last card on Evolution. In Figma that card runs 8 into the home indicator area,
+ * which is only a thin bar. A taller bottom inset is a row of buttons: the card stays above that.
+ */
+export function evolutionBottomPadding(insetBottom: number): number {
+  return insetBottom > Detail.homeIndicatorArea ? insetBottom : Detail.evolutionBottomGap;
+}
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;

@@ -5,13 +5,14 @@
 import { type InfiniteData, skipToken, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import {
+  type EvolutionChain,
   getEvolutionChain,
   getPokemon,
   getPokemonList,
   getPokemonSpecies,
   type PokemonListResponse,
 } from '@/data/pokeapi';
-import { toListItem } from '@/lib/pokemon';
+import { flattenEvolutionChain, idFromUrl, toListItem } from '@/lib/pokemon';
 
 const PAGE_SIZE = 20;
 // PokeAPI has no search endpoint; this limit returns the whole list (~1350) in one request.
@@ -73,6 +74,10 @@ export function usePokemonSpecies(id: number) {
   });
 }
 
+function selectStages(data: EvolutionChain) {
+  return flattenEvolutionChain(data.chain);
+}
+
 /**
  * Pass the chain id from the species (`idFromUrl(species.evolution_chain.url)`); waits while undefined.
  * `refetch` only works once there is an id: while it waits there is nothing to run.
@@ -81,5 +86,24 @@ export function useEvolutionChain(chainId: number | undefined) {
   return useQuery({
     queryKey: pokemonKeys.evolutionChain(chainId ?? 0),
     queryFn: chainId === undefined ? skipToken : () => getEvolutionChain(chainId),
+    select: selectStages,
   });
+}
+
+/**
+ * The evolution stages of a species, from two requests in a row: the species links to its chain.
+ * `stages` is undefined until they are known, `isPending` tells loading apart from a failed request.
+ */
+export function useEvolutionStages(speciesId: number) {
+  const species = usePokemonSpecies(speciesId);
+  const chainUrl = species.data?.evolution_chain?.url;
+  const chain = useEvolutionChain(chainUrl ? idFromUrl(chainUrl) : undefined);
+
+  return {
+    // A species without a chain has no stages. The chain query would wait for its id forever.
+    stages: species.data && !chainUrl ? [] : chain.data,
+    isPending: species.isPending || (chainUrl !== undefined && chain.isPending),
+    // Try again repeats the request that failed.
+    refetch: species.data ? chain.refetch : species.refetch,
+  };
 }

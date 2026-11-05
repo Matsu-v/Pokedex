@@ -38,6 +38,26 @@ export function filterPokemon(items: PokemonListItem[], text: string): PokemonLi
   return items.filter((item) => item.name.includes(query) || item.id === number);
 }
 
+/** One link of an evolution chain, as far as flattening needs it. */
+export type EvolutionLink = {
+  species: { name: string; url: string };
+  evolves_to: EvolutionLink[];
+};
+
+/**
+ * A chain as a list of stages: Charmander, Charmeleon and Charizard are three stages, Eevee's eight
+ * evolutions share the second. Per stage, because a straight list would say Vaporeon becomes Jolteon.
+ */
+export function flattenEvolutionChain(root: EvolutionLink): PokemonListItem[][] {
+  const stages: PokemonListItem[][] = [];
+  let links = [root];
+  while (links.length > 0) {
+    stages.push(links.map((link) => toListItem(link.species)));
+    links = links.flatMap((link) => link.evolves_to);
+  }
+  return stages;
+}
+
 /** Official artwork for a Pokémon id. The list endpoint has no images, so we build the URL. */
 export function artworkUrl(id: number): string {
   return `${ARTWORK_BASE}/${id}.png`;
