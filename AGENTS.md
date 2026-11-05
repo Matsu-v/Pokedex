@@ -61,7 +61,8 @@ code. No library that needs a development build.
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
 `src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`, stat names and bar widths
-`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts`. Anything new that other
+`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts` (`statBarWidth` is Detail's scale; #14
+Compare picks its own, because strong Pokémon must stay apart there). Anything new that other
 features will use gets a line here.
 
 ## Rules
@@ -198,8 +199,9 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   while offline did nothing.
 - **Does a Figma value follow a rule? Work it out before you copy it.** The Stats bars look exact, but
   they run from 2.26 to 3.00 px per point and Charmander's Speed says 50 where the API gives 65: sample
-  data, so value / 255 stays. Also add up the tallest tab against Figma's frame: Stats scrolled 10 px on
-  844 until the gap below it became Figma's 14 (`Detail.bottomGap`).
+  data, so no formula matches them. I recommended value / 255; Mats chose value / 114, the closest to
+  Figma, even though everything from 114 up is then a full bar. Also add up the tallest tab against
+  Figma's frame: Stats scrolled 10 px on 844 until the gap below it became Figma's 14 (`Detail.bottomGap`).
 - **Opening any route in a running web export:** `history.pushState({}, '', '/pokemon/242')` followed
   by `dispatchEvent(new PopStateEvent('popstate', { state: {} }))`. This saves searching for a Pokémon
   that is far down the list. Open `/` first: see the lesson on clean URLs.
