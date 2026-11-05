@@ -63,8 +63,9 @@ Shared setup is reused, never added a second time: API client `src/data/pokeapi.
 `src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`, stat names and bar widths
 `formatStatName` and `statBarWidth` in `src/lib/pokemon.ts` (`statBarWidth` is Detail's scale; #14
 Compare picks its own, because strong Pokémon must stay apart there), Pokecard variants `PokemonCard`
-(Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx`. Anything new that other
-features will use gets a line here.
+(Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx`, the screen title with the space
+below it `GridTitle` in `src/components/pokemon-grid.tsx`. Anything new that other features will use
+gets a line here.
 
 ## Rules
 
@@ -230,3 +231,15 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   element's own `filter` and use `getImageData`.
 - **Haptics on web:** `impactAsync` calls `navigator.vibrate`, with `[40]` for Light. Replace that function
   with a counter to check the number of taps per toggle. What it feels like still needs a phone.
+- **The native tab bar on the web fallback shows no icons,** only labels (`NativeTabsView.web.js`), and every
+  tab mounts at page load (`forceMount`). So tab icons are checked as PNGs against Figma and then on a phone,
+  `find` also returns text from the hidden tab, and a test switch for a tab's first load has to be set before
+  the page loads.
+- **Tab label fonts on Android:** Rubik here too, although Figma has SF Pro: the course rule goes first. The
+  bar takes one family for both states, from `labelStyle.default`;
+  `selected.fontFamily` only reaches iOS. The lookup goes through `ReactFontManager`, where `expo-font` registers
+  each file as the normal style, so a `fontWeight` of 700 misses it and gives the system font. Family only, no weight.
+- **Testing an SQLite failure on web:** a temporary `sessionStorage` switch in `listFavorites`, exported to a
+  throwaway folder and restored straight after the export. A new port means a new origin, so an empty database.
+- **Check that `http.server` really started.** Port 8765 was held by another process here, which answered with
+  HTTP 426. Check `netstat` first, and compare the bundle name in `index.html` with your export.

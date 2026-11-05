@@ -10,6 +10,8 @@ type Props = {
   items: PokemonListItem[];
   /** Scrolls along with the list. */
   title?: string;
+  /** Space above the first thing in the list: 32 on Home (1:835), 24 on Favorites (1:15077). */
+  topGap?: number;
   onPressItem: (id: number) => void;
   onOptionsPressItem: (id: number) => void;
   onEndReached?: () => void;
@@ -20,12 +22,12 @@ type Props = {
 export function PokemonGrid({
   items,
   title,
+  topGap = Spacing.five,
   onPressItem,
   onOptionsPressItem,
   onEndReached,
   footer,
 }: Props) {
-  const theme = useTheme();
   // A card has `flex: 1`, so a lone card in the last row would fill it. An empty cell keeps it at half.
   const cells: (PokemonListItem | null)[] = items.length % 2 === 1 ? [...items, null] : items;
 
@@ -46,23 +48,28 @@ export function PokemonGrid({
           <View style={styles.emptyCell} />
         )
       }
-      ListHeaderComponent={
-        title ? (
-          <Text accessibilityRole="header" style={[styles.title, { color: theme.text }]}>
-            {title}
-          </Text>
-        ) : undefined
-      }
+      ListHeaderComponent={title ? <GridTitle title={title} /> : undefined}
       ListFooterComponent={footer}
       ItemSeparatorComponent={RowGap}
       columnWrapperStyle={styles.row}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: topGap }]}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       // With the keyboard up, the first tap on a card would otherwise only close the keyboard.
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
     />
+  );
+}
+
+/** The title of the grid with the space below it, also for a screen that has no grid yet. */
+export function GridTitle({ title }: { title: string }) {
+  const theme = useTheme();
+
+  return (
+    <Text accessibilityRole="header" style={[styles.title, { color: theme.text }]}>
+      {title}
+    </Text>
   );
 }
 
@@ -74,7 +81,6 @@ function RowGap() {
 const styles = StyleSheet.create({
   content: {
     paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.five,
     paddingBottom: Spacing.three,
   },
   title: { ...ScreenTitle, marginBottom: Spacing.three },

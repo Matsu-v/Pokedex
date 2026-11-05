@@ -1,6 +1,6 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
-import { FontSize } from '@/constants/theme';
+import { FontSize, Fonts } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function AppTabs() {
@@ -11,21 +11,28 @@ export default function AppTabs() {
       backgroundColor={theme.tabBar}
       iconColor={{ default: theme.tabInactive, selected: theme.tabActive }}
       labelStyle={{
-        default: { color: theme.tabInactive, fontSize: FontSize.tab, fontWeight: '500' },
-        selected: { color: theme.tabActive, fontSize: FontSize.tab, fontWeight: '700' },
+        // Android has one family for both states, the default one: there the active label is not bold.
+        default: { color: theme.tabInactive, fontFamily: Fonts.medium, fontSize: FontSize.tab },
+        selected: { color: theme.tabActive, fontFamily: Fonts.bold, fontSize: FontSize.tab },
       }}
-      indicatorColor={theme.chip}>
+      disableIndicator>
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Pokémons</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/pokemons.png')}
+          src={{
+            default: require('@/assets/images/tabIcons/pokemons-outline.png'),
+            selected: require('@/assets/images/tabIcons/pokemons.png'),
+          }}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="favorites">
         <NativeTabs.Trigger.Label>Favorites</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/favorites.png')}
+          src={{
+            default: require('@/assets/images/tabIcons/favorites.png'),
+            selected: require('@/assets/images/icons/favorite-active.png'),
+          }}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
