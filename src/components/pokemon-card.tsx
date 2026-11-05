@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useState } from 'react';
 import {
   Pressable,
   type StyleProp,
@@ -10,7 +11,7 @@ import {
 
 import { Card, FontSize, Fonts, Radius, Shadow } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { artworkUrl, capitalize, formatNumber } from '@/lib/pokemon';
+import { capitalize, cardImageUrls, formatNumber } from '@/lib/pokemon';
 
 type Props = {
   id: number;
@@ -20,8 +21,27 @@ type Props = {
 };
 
 /**
- * Pokecard from Figma (1:14698, Row variant): number badge, artwork, name and ⋮ button.
- * Takes the width its parent gives it (`flex: 1`); the artwork stays square.
+ * The image on a card: the sprite, and when a URL fails the next one from `cardImageUrls`. All drawing
+ * of the image happens here. Cards are keyed by id, so a new id is a new instance and starts over.
+ */
+function CardImage({ id }: { id: number }) {
+  const urls = cardImageUrls(id);
+  const [index, setIndex] = useState(0);
+
+  return (
+    <Image
+      source={urls[index]}
+      style={styles.image}
+      contentFit="contain"
+      accessibilityIgnoresInvertColors
+      onError={() => setIndex(Math.min(index + 1, urls.length - 1))}
+    />
+  );
+}
+
+/**
+ * Pokecard from Figma (1:14698, Row variant): number badge, sprite, name and ⋮ button.
+ * Takes the width its parent gives it (`flex: 1`); the image stays square.
  */
 export function PokemonCard({ id, name, onPress, onOptionsPress }: Props) {
   const theme = useTheme();
@@ -39,12 +59,7 @@ export function PokemonCard({ id, name, onPress, onOptionsPress }: Props) {
         pressed && styles.pressed,
       ]}>
       <View style={[styles.artwork, { backgroundColor: theme.cardArtwork }]}>
-        <Image
-          source={artworkUrl(id)}
-          style={styles.image}
-          contentFit="contain"
-          accessibilityIgnoresInvertColors
-        />
+        <CardImage id={id} />
         <NumberBadge number={number} style={styles.badgeOnArtwork} />
       </View>
 
@@ -77,7 +92,7 @@ type ListCardProps = {
 };
 
 /**
- * Pokecard from Figma (1:14699, List variant): artwork on the left, number and name next to it.
+ * Pokecard from Figma (1:14699, List variant): sprite on the left, number and name next to it.
  * Takes the width its parent gives it.
  */
 export function PokemonListCard({ id, name, onPress }: ListCardProps) {
@@ -89,12 +104,7 @@ export function PokemonListCard({ id, name, onPress }: ListCardProps) {
   const content = (
     <>
       <View style={[styles.listArtwork, { backgroundColor: theme.cardArtwork }]}>
-        <Image
-          source={artworkUrl(id)}
-          style={styles.image}
-          contentFit="contain"
-          accessibilityIgnoresInvertColors
-        />
+        <CardImage id={id} />
       </View>
       <View style={styles.listBody}>
         <NumberBadge number={number} style={styles.badgeInList} />

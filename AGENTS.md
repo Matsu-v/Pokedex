@@ -64,7 +64,8 @@ Shared setup is reused, never added a second time: API client `src/data/pokeapi.
 `src/components/type-chip.tsx`, stat names and bar widths `formatStatName` and `statBarWidth` in
 `src/lib/pokemon.ts` (`statBarWidth` is Detail's scale; Compare has its own, `compareBarWidth` in
 `src/lib/compare.ts`, because strong Pokémon must stay apart there), Pokecard variants `PokemonCard`
-(Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx`, the screen title with the space
+(Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx` (a card's image: `CardImage` there,
+which tries `cardImageUrls` in order; Detail and Compare use `artworkUrl`), the screen title with the space
 below it `GridTitle` in `src/components/pokemon-grid.tsx`, the top bar with back and the screen's own
 actions `TopBar` and `TopBarButton` in `src/components/detail-top-bar.tsx`. Anything new that other
 features will use gets a line here.
@@ -254,3 +255,17 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Many Pokémon tie on stats won.** Charmander vs Squirtle and Charizard vs Blastoise are both 3 each, so they
   cannot test a winner; Bulbasaur vs Pikachu gives "Bulbasaur wins 4 of 6 stats". Its total goes to Pikachu
   (318 and 320), which shows that the verdict and the total are two different things.
+- **`expo-image` cannot scale without smoothing, Figma can.** The docs have no option for it. iOS sets
+  `.trilinear` in `ImageView.swift`, Android draws with `BitmapDrawable`'s default `FILTER_BITMAP_FLAG`, and React
+  Native's `Image` is trilinear on iOS too. Figma's 3x export of a sprite is close to nearest neighbour, so cards are
+  softer than Figma (read from the source, not seen on a phone). Skia's `FilterMode.Nearest` is the one way in Expo
+  Go, at the price of a package and a canvas per card. `CardImage` is the only component that would change.
+- **Comparing with Figma's source images:** `rawImages` in `download_assets` gives the originals, also for the
+  instances on a screen, in no fixed order. Decode them and hash the pixels against your candidates: that is how
+  the cards turned out to be exactly `sprites/pokemon/{id}.png`. The folder has 96x96 files only; the PNG header
+  (first 24 bytes) gives the size without downloading the file.
+- **A failed `expo-image` does not try again by itself,** not after a re-render and not when the network returns,
+  only with a new source or a new mount (Android keeps `loadedSource`, iOS reloads on a change of props or size).
+- **Testing a failing image on web:** at runtime, wrap `HTMLImageElement.prototype.src` and `Element.prototype.setAttribute`
+  so image URLs point to a dead address while a flag is on. In a search test, a letter that changes the results can
+  change a row of the `FlatList` and so remount the card; a trailing space re-renders it without a remount.

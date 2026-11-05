@@ -19,7 +19,7 @@ The user sees everything about one Pokémon, as on the **Detail** screen in Figm
 - Stats: HP, Attack, Defense, Special Attack, Special Defense, Speed, each with its value and a
   bar. Bar width = value / 114, at most full: 3 px per point on Figma's track of 342, the closest a
   formula gets to Figma's bars, which follow no rule. Everything from 114 up is a full bar.
-- Evolution: the chain in order, each with artwork, number and name; tapping one opens it, on About.
+- Evolution: the chain in order, each with sprite, number and name; tapping one opens it, on About.
   Figma only shows a straight chain. A branching chain goes per stage: a dotted line between the
   stages, the cards of one stage below each other (Eevee, then its eight evolutions). A line between
   all cards would say Vaporeon becomes Jolteon. The price: Wurmple does not show that Silcoon becomes

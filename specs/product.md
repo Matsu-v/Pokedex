@@ -29,7 +29,7 @@ and the [collapsing header](./optional/detail-collapsing-header.md). Both are in
 - **API**: [PokeAPI](https://pokeapi.co/docs/v2), no key.
 - **Endpoints**: `/pokemon?limit&offset` (list and search), `/pokemon/{id|name}` (detail, stats, types),
   `/pokemon-species/{id}` (evolution chain link), `/evolution-chain/{id}`.
-  Artwork: built from the id, see feature 01.
+  Images: built from the id, a sprite on cards and the artwork on Detail and Compare, see feature 01.
 - **Fetching**: TanStack Query. Every query has a loading and an error state on screen.
 - **Stored on the phone**: favourites in SQLite (`expo-sqlite`): columns `id`, `name`, `added_at`.
 
