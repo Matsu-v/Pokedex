@@ -1,9 +1,8 @@
 /**
- * Pure helpers for Pokémon ids, names and artwork. No React, no network.
+ * Pure helpers for Pokémon ids, names and images. No React, no network.
  */
 
-const ARTWORK_BASE =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
+const IMAGE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
 /**
  * The numeric id at the end of a PokeAPI resource URL.
@@ -60,7 +59,24 @@ export function flattenEvolutionChain(root: EvolutionLink): PokemonListItem[][] 
 
 /** Official artwork for a Pokémon id. The list endpoint has no images, so we build the URL. */
 export function artworkUrl(id: number): string {
-  return `${ARTWORK_BASE}/${id}.png`;
+  return `${IMAGE_BASE}/other/official-artwork/${id}.png`;
+}
+
+/** The 96x96 pixel sprite of a Pokémon id: the image on Figma's Pokecard. */
+export function spriteUrl(id: number): string {
+  return `${IMAGE_BASE}/${id}.png`;
+}
+
+/**
+ * What a card tries, in this order. Nine forms have no sprite (10264-10271, 10301), and four of those
+ * have no artwork either (10264, 10266, 10268, 10270): they only have a Scarlet-Violet image.
+ */
+export function cardImageUrls(id: number): string[] {
+  return [
+    spriteUrl(id),
+    artworkUrl(id),
+    `${IMAGE_BASE}/versions/generation-ix/scarlet-violet/${id}.webp`,
+  ];
 }
 
 /** Pokédex number with at least three digits: 1 → "001", 25 → "025", 1025 → "1025". */
