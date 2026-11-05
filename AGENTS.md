@@ -68,7 +68,10 @@ features will use gets a line here.
 
 ## Rules
 
-- Every query on screen has a loading state and an error state with a **Try again** button.
+- Every query on screen has a loading state and an error state with a **Try again** button. The one
+  exception is the read of a single row behind the heart on Detail (`useIsFavorite`): it shows the
+  outline until it answers, and a tap is the retry. Everything else that visibly loads keeps both
+  states, including the Favorites list.
 - Types for API responses live in `src/data/pokeapi.ts`. No `any`, no `as` casts (`as const` is fine), no `@ts-ignore`, no `console.log`.
 - Fonts come from `Fonts` in `theme.ts`, loaded with Expo Font. The course's font is Rubik; no new font family without asking.
 - `npx expo lint` and `npx tsc --noEmit` must both be clean before a commit.
@@ -214,3 +217,16 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   card on Evolution runs 8 into it (26 from the edge). `insets.bottom + 14` looked the same at rest and
   scrolled 22 px on 844; Mats follows Figma, so Evolution has its own padding. An inset above Figma's 34
   is a row of Android buttons, and the card stays above that.
+- **Comparing an icon with Figma:** unlike `get_screenshot`, `download_assets` with `defaultFormat: 'png'`
+  and `defaultScale` does render at 2x and 3x. That export has Figma's grey page colour (`#E5E5E5`)
+  behind the icon, so put your own PNG on that colour and compare per channel, not per alpha. A Figma
+  path can also contain `H` and `V`, so a small rasterizer has to handle those as well.
+- **In a hidden browser pane images may not load until you take a screenshot.** `tabs_context` says
+  whether the pane is hidden. An image stayed at `naturalWidth` 0 for 6 seconds, and while it waits
+  `expo-image` keeps the old `<img>` next to the new one, so the first `img` in the DOM is the old one. It
+  looked like a heart that stayed empty. Take a screenshot first, then read the last `img`.
+- **Colours read from a pane screenshot are not exact, also through `zoom`:** `#FF4F68` read as
+  (231, 93, 108); I did not find out why. For an exact colour, draw the image on a canvas with the
+  element's own `filter` and use `getImageData`.
+- **Haptics on web:** `impactAsync` calls `navigator.vibrate`, with `[40]` for Light. Replace that function
+  with a counter to check the number of taps per toggle. What it feels like still needs a phone.

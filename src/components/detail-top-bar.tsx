@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -7,12 +8,22 @@ import { useTheme } from '@/hooks/use-theme';
 // As in Figma. The one place to change it, also for screen readers.
 const BACK_LABEL = 'Vorige';
 
-/**
- * Top bar of Detail (1:15396, 1:15399): back button and heart. The heart is only an image for now:
- * issue #11 makes it a button.
- */
-export function DetailTopBar({ onBack }: { onBack: () => void }) {
+type DetailTopBarProps = {
+  onBack: () => void;
+  isFavorite: boolean;
+  /** Without it the heart shows its state, but is disabled. */
+  onToggleFavorite?: () => void;
+};
+
+/** Top bar of Detail (1:15396, 1:15399): back button and heart. */
+export function DetailTopBar({ onBack, isFavorite, onToggleFavorite }: DetailTopBarProps) {
   const theme = useTheme();
+
+  function pressHeart() {
+    // At the press, not after the write: it is immediate, and a quick second tap gets its own.
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onToggleFavorite?.();
+  }
 
   return (
     <View style={styles.bar}>
@@ -30,13 +41,23 @@ export function DetailTopBar({ onBack }: { onBack: () => void }) {
         <Text style={[styles.backLabel, { color: theme.backButton }]}>{BACK_LABEL}</Text>
       </Pressable>
 
-      <View style={styles.heart}>
+      <Pressable
+        onPress={pressHeart}
+        disabled={!onToggleFavorite}
+        hitSlop={Detail.heartHitSlop}
+        accessibilityRole="button"
+        accessibilityLabel={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        style={({ pressed }) => [styles.heart, pressed && styles.pressed]}>
         <Image
-          source={require('@/assets/images/icons/favorite.png')}
+          source={
+            isFavorite
+              ? require('@/assets/images/icons/favorite-active.png')
+              : require('@/assets/images/icons/favorite.png')
+          }
           style={styles.heartIcon}
-          tintColor={theme.text}
+          tintColor={isFavorite ? theme.favoriteActive : theme.text}
         />
-      </View>
+      </Pressable>
     </View>
   );
 }
