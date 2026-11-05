@@ -60,10 +60,11 @@ export function useAllPokemonNames() {
   });
 }
 
-export function usePokemon(id: number | string) {
+/** Waits while the id is undefined, such as the empty slot on Compare. */
+export function usePokemon(id: number | string | undefined) {
   return useQuery({
-    queryKey: pokemonKeys.detail(id),
-    queryFn: () => getPokemon(id),
+    queryKey: pokemonKeys.detail(id ?? 0),
+    queryFn: id === undefined ? skipToken : () => getPokemon(id),
   });
 }
 

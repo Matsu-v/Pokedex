@@ -34,6 +34,7 @@ export default function PokemonDetailScreen() {
       */}
       <DetailTopBar
         onBack={() => router.back()}
+        onCompare={() => router.push({ pathname: '/compare', params: { a: id } })}
         isFavorite={isFavorite}
         onToggleFavorite={pokemon && (() => toggleFavorite({ id: pokemon.id, name: pokemon.name }))}
       />

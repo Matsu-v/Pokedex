@@ -238,4 +238,21 @@ export function evolutionBottomPadding(insetBottom: number): number {
   return insetBottom > Detail.homeIndicatorArea ? insetBottom : Detail.evolutionBottomGap;
 }
 
+// Compare has no Figma screen, and the course says to follow Figma's style: Detail at half width.
+// Everything that is not here comes from `Detail`.
+export const Compare = {
+  // Between the two columns: the grid's 24 + 163 + 16 + 163 + 24 = 390 (1:835).
+  columnGap: 16,
+  // Detail's 200 with a quarter on the white part, at the same ratio.
+  artwork: 136,
+  artworkOnSheet: 34,
+  // Name 29, gap 12, chip 32, gap 24, artwork 136: a column keeps this height while it loads or failed.
+  columnMinHeight: 233,
+  // Between the two bars of a row, where they start.
+  barGap: 4,
+  verdictLineHeight: 20,
+  disabledOpacity: 0.3,
+  pressedOpacity: PressedOpacity,
+} as const;
+
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;

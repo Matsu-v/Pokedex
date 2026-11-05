@@ -17,14 +17,16 @@ export function LoadingState() {
 type ErrorStateProps = {
   message: string;
   onRetry: () => void;
+  /** For half a screen, such as a column on Compare: without this the button text wraps there. */
+  compact?: boolean;
 };
 
 /** A query without data that failed: takes the whole space of the content. */
-export function ErrorState({ message, onRetry }: ErrorStateProps) {
+export function ErrorState({ message, onRetry, compact = false }: ErrorStateProps) {
   const theme = useTheme();
 
   return (
-    <View style={styles.center}>
+    <View style={[styles.center, compact && styles.compact]}>
       <Text style={[styles.message, { color: theme.text }]}>{message}</Text>
       <TryAgainButton onPress={onRetry} />
     </View>
@@ -102,6 +104,7 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
     padding: Spacing.four,
   },
+  compact: { paddingHorizontal: 0 },
   footer: {
     alignItems: 'center',
     gap: Spacing.two,
