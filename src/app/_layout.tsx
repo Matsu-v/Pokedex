@@ -49,6 +49,8 @@ export default function RootLayout() {
           <Stack.Screen name="search" options={{ headerShown: false, title: 'Search' }} />
           {/* Detail draws its own top bar: a native header differs per platform and from Figma. */}
           <Stack.Screen name="pokemon/[id]" options={{ headerShown: false, title: 'Pokémon' }} />
+          {/* The same top bar as Detail, also here without a native header. */}
+          <Stack.Screen name="compare" options={{ headerShown: false, title: 'Compare' }} />
         </Stack>
       </ThemeProvider>
     </QueryClientProvider>

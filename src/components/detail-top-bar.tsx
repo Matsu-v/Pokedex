@@ -1,29 +1,23 @@
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
+import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Detail, FontSize, Fonts } from '@/constants/theme';
+import { Compare, Detail, FontSize, Fonts } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 // As in Figma. The one place to change it, also for screen readers.
 const BACK_LABEL = 'Vorige';
 
-type DetailTopBarProps = {
+type TopBarProps = {
   onBack: () => void;
-  isFavorite: boolean;
-  /** Without it the heart shows its state, but is disabled. */
-  onToggleFavorite?: () => void;
+  /** What the screen has on the right. */
+  children: ReactNode;
 };
 
-/** Top bar of Detail (1:15396, 1:15399): back button and heart. */
-export function DetailTopBar({ onBack, isFavorite, onToggleFavorite }: DetailTopBarProps) {
+/** Top bar of Detail (1:15396): the back button, with the screen's own actions on the right. */
+export function TopBar({ onBack, children }: TopBarProps) {
   const theme = useTheme();
-
-  function pressHeart() {
-    // At the press, not after the write: it is immediate, and a quick second tap gets its own.
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onToggleFavorite?.();
-  }
 
   return (
     <View style={styles.bar}>
@@ -38,9 +32,61 @@ export function DetailTopBar({ onBack, isFavorite, onToggleFavorite }: DetailTop
           style={styles.chevron}
           tintColor={theme.backButton}
         />
-        <Text style={[styles.backLabel, { color: theme.backButton }]}>{BACK_LABEL}</Text>
+        <Text style={[styles.label, { color: theme.backButton }]}>{BACK_LABEL}</Text>
       </Pressable>
 
+      <View style={styles.actions}>{children}</View>
+    </View>
+  );
+}
+
+type TopBarButtonProps = {
+  label: string;
+  /** Without it the button is disabled. */
+  onPress?: () => void;
+};
+
+/** Not in Figma: Compare and Swap, in the style of the back button's label. */
+export function TopBarButton({ label, onPress }: TopBarButtonProps) {
+  const theme = useTheme();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={!onPress}
+      hitSlop={Detail.backHitSlop}
+      accessibilityRole="button"
+      style={({ pressed }) => [
+        styles.button,
+        !onPress && styles.disabled,
+        pressed && styles.pressed,
+      ]}>
+      <Text style={[styles.label, { color: theme.backButton }]}>{label}</Text>
+    </Pressable>
+  );
+}
+
+type DetailTopBarProps = {
+  onBack: () => void;
+  onCompare: () => void;
+  isFavorite: boolean;
+  /** Without it the heart shows its state, but is disabled. */
+  onToggleFavorite?: () => void;
+};
+
+/** Top bar of Detail (1:15396, 1:15399): back button and heart, with Compare in the free space. */
+export function DetailTopBar({ onBack, onCompare, isFavorite, onToggleFavorite }: DetailTopBarProps) {
+  const theme = useTheme();
+
+  function pressHeart() {
+    // At the press, not after the write: it is immediate, and a quick second tap gets its own.
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onToggleFavorite?.();
+  }
+
+  return (
+    <TopBar onBack={onBack}>
+      <TopBarButton label="Compare" onPress={onCompare} />
       <Pressable
         onPress={pressHeart}
         disabled={!onToggleFavorite}
@@ -58,7 +104,7 @@ export function DetailTopBar({ onBack, isFavorite, onToggleFavorite }: DetailTop
           tintColor={isFavorite ? theme.favoriteActive : theme.text}
         />
       </Pressable>
-    </View>
+    </TopBar>
   );
 }
 
@@ -79,12 +125,19 @@ const styles = StyleSheet.create({
     paddingVertical: Detail.backPadding.vertical,
   },
   pressed: { opacity: Detail.pressedOpacity },
+  disabled: { opacity: Compare.disabledOpacity },
   chevron: { width: Detail.chevron.width, height: Detail.chevron.height },
-  backLabel: {
+  label: {
     fontFamily: Fonts.regular,
     fontSize: FontSize.back,
     lineHeight: Detail.backLineHeight,
     letterSpacing: Detail.backLetterSpacing,
+  },
+  actions: { flexDirection: 'row', alignItems: 'center' },
+  button: {
+    height: Detail.barHeight,
+    justifyContent: 'center',
+    paddingHorizontal: Detail.backPadding.horizontal,
   },
   heart: { padding: Detail.heartPadding },
   heartIcon: { width: Detail.heartIcon, height: Detail.heartIcon },

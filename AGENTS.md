@@ -60,12 +60,14 @@ code. No library that needs a development build.
 
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
-`src/components/query-state.tsx`, type chip `src/components/type-chip.tsx`, stat names and bar widths
-`formatStatName` and `statBarWidth` in `src/lib/pokemon.ts` (`statBarWidth` is Detail's scale; #14
-Compare picks its own, because strong Pokémon must stay apart there), Pokecard variants `PokemonCard`
+`src/components/query-state.tsx` (`ErrorState` has `compact` for half a screen), type chip
+`src/components/type-chip.tsx`, stat names and bar widths `formatStatName` and `statBarWidth` in
+`src/lib/pokemon.ts` (`statBarWidth` is Detail's scale; Compare has its own, `compareBarWidth` in
+`src/lib/compare.ts`, because strong Pokémon must stay apart there), Pokecard variants `PokemonCard`
 (Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx`, the screen title with the space
-below it `GridTitle` in `src/components/pokemon-grid.tsx`. Anything new that other features will use
-gets a line here.
+below it `GridTitle` in `src/components/pokemon-grid.tsx`, the top bar with back and the screen's own
+actions `TopBar` and `TopBarButton` in `src/components/detail-top-bar.tsx`. Anything new that other
+features will use gets a line here.
 
 ## Rules
 
@@ -243,3 +245,12 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   throwaway folder and restored straight after the export. A new port means a new origin, so an empty database.
 - **Check that `http.server` really started.** Port 8765 was held by another process here, which answered with
   HTTP 426. Check `netstat` first, and compare the bundle name in `index.html` with your export.
+- **In a hidden browser pane `innerWidth` is 0,** so every measurement is wrong without any error: the heart
+  on Detail measured x 96 instead of 342. Call `resize_window` with 390x800 first (Figma's 844 without the
+  status bar that web lacks), and only compare numbers that were measured at that size.
+- **`router.dismissTo` updates the params of the screen it returns to.** The docs do not say so and the source
+  only shows `POP_TO`, so this is measured on web: `/compare?a=4` became `/compare?a=4&b=7`, with Search gone
+  from the stack. On a phone it still has to be seen.
+- **Many Pokémon tie on stats won.** Charmander vs Squirtle and Charizard vs Blastoise are both 3 each, so they
+  cannot test a winner; Bulbasaur vs Pikachu gives "Bulbasaur wins 4 of 6 stats". Its total goes to Pikachu
+  (318 and 320), which shows that the verdict and the total are two different things.

@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,14 +15,21 @@ const DEBOUNCE_MS = 250;
 
 export default function SearchScreen() {
   const theme = useTheme();
+  // With this param Search is the picker of Compare: the id of the Pokémon on the left.
+  const { compareWith } = useLocalSearchParams<{ compareWith?: string }>();
   const [text, setText] = useState('');
   const debouncedText = useDebouncedValue(text, DEBOUNCE_MS);
   const { data, isPending, refetch } = useAllPokemonNames();
   const query = debouncedText.trim();
 
-  function openDetail(id: number) {
+  function openResult(id: number) {
     Keyboard.dismiss();
-    router.push(`/pokemon/${id}`);
+    if (compareWith === undefined) {
+      router.push(`/pokemon/${id}`);
+    } else {
+      // Back to the Compare that is waiting, so that back from there goes to Detail.
+      router.dismissTo({ pathname: '/compare', params: { a: compareWith, b: id } });
+    }
   }
 
   function renderContent() {
@@ -43,7 +50,7 @@ export default function SearchScreen() {
     return (
       <PokemonGrid
         items={results}
-        onPressItem={openDetail}
+        onPressItem={openResult}
         // The options sheet is issue #13.
         onOptionsPressItem={() => {}}
       />
