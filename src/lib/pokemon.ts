@@ -83,10 +83,13 @@ export function formatStatName(name: string): string {
   return name === 'hp' ? 'HP' : formatAbility(name);
 }
 
-/** The highest base stat in the API: a bar with this value is full. */
-const MAX_BASE_STAT = 255;
+/**
+ * A bar with this value is full: 3 px per point on Figma's track of 342, the closest a formula gets
+ * to Figma's bars on Detail. Stats go up to 255, so everything from 114 up is a full bar.
+ */
+const MAX_BASE_STAT = 114;
 
-/** Width of a stat bar as a percentage of its track: 51 → "20%". */
+/** Width of a stat bar on Detail as a percentage of its track: 57 → "50%", 135 → "100%". */
 export function statBarWidth(baseStat: number): `${number}%` {
-  return `${(baseStat / MAX_BASE_STAT) * 100}%`;
+  return `${Math.min(baseStat / MAX_BASE_STAT, 1) * 100}%`;
 }
