@@ -15,6 +15,7 @@ const Palette = {
   artwork: '#F6F6FF', // artwork area behind the sprite on a Pokecard
   silver: '#DBDAE6', // Shades/Silver: line under an inactive tab on Detail
   grey: '#F3F3F7', // Shades/Grey: empty part of a stat bar on Detail
+  red: '#FF4F68', // Primary/Red: filled heart
 } as const;
 
 const light = {
@@ -45,6 +46,7 @@ const light = {
   detailStatTrack: Palette.grey,
   // Dotted line between the stages of an evolution chain: Midnight at 30%.
   detailEvolutionLine: 'rgba(14, 9, 64, 0.3)',
+  favoriteActive: Palette.red,
   // Not in Figma: loading and error states use the primary colour.
   spinner: Palette.purple,
   button: Palette.purple,
@@ -183,6 +185,8 @@ export const Detail = {
   backLetterSpacing: -0.408,
   heartPadding: 8,
   heartIcon: 24,
+  // Extra touch area around the 40x40 heart, so the target is 44pt.
+  heartHitSlop: 2,
   // The side margin, and the gap between all the blocks on the screen.
   margin: 24,
   // Line heights are the rounded heights Figma gives its text boxes: 32 × 1.2 → 38, 14 × 1.2 → 17,

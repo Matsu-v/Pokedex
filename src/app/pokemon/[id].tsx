@@ -13,6 +13,7 @@ import { StatsTab } from '@/components/stats-tab';
 import { TypeChip } from '@/components/type-chip';
 import { Detail, evolutionBottomPadding, FontSize, Fonts } from '@/constants/theme';
 import type { Pokemon } from '@/data/pokeapi';
+import { useIsFavorite, useToggleFavorite } from '@/data/queries/favorites';
 import { useEvolutionStages, usePokemon } from '@/data/queries/pokemon';
 import { useTheme } from '@/hooks/use-theme';
 import { artworkUrl, capitalize, formatNumber, idFromUrl } from '@/lib/pokemon';
@@ -21,11 +22,21 @@ export default function PokemonDetailScreen() {
   const theme = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: pokemon, isPending, refetch } = usePokemon(Number(id));
+  // One local row, no visible loading or error state: see the rule in AGENTS.md.
+  const { data: isFavorite = false } = useIsFavorite(Number(id));
+  const { mutate: toggleFavorite } = useToggleFavorite();
 
   return (
     <SafeAreaView edges={['top']} style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Outside the query: going back must also work while loading or after an error. */}
-      <DetailTopBar onBack={() => router.back()} />
+      {/*
+        Outside the query: going back must also work while loading or after an error. The heart waits
+        for `pokemon`, because a favourite stores the name.
+      */}
+      <DetailTopBar
+        onBack={() => router.back()}
+        isFavorite={isFavorite}
+        onToggleFavorite={pokemon && (() => toggleFavorite({ id: pokemon.id, name: pokemon.name }))}
+      />
       {/* `pokemon` goes first: a failed refetch sets the error, but what is there must stay. */}
       {pokemon ? (
         <DetailContent pokemon={pokemon} />
