@@ -16,7 +16,12 @@ closing the app, as on the **Favorites** screen in Figma.
   also go through TanStack Query, with invalidation after every write, so every screen updates.
 - Heart on Detail: outline = not a favourite, filled red = favourite. Toggling gives a light haptic
   tap (`expo-haptics`). This is the app's required native feature.
-- Favorites tab: title "My Favorites", same two-column cards as Browse, newest first.
+- Favorites tab: title "My favorites" as in Figma, same two-column cards as Browse, newest first.
+- Figma has no empty, loading or error state here. In all three the title stays in its place, with the
+  message, spinner or error centred below it.
+- Tab bar as in Figma: each tab has its own active and inactive icon (filled and outline). Android
+  has no pill behind the active icon and a solid Daylight bar. Labels are in Rubik, the course's font;
+  Android allows one family for both states, so only iOS has Figma's bold active label.
 - Colours, sizes and fonts only from `src/constants/theme.ts`.
 
 ## Acceptance Criteria

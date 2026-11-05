@@ -27,8 +27,9 @@ const light = {
   badgeText: Palette.white,
   tabActive: Palette.purple,
   tabInactive: Palette.midnight,
-  // Menubar: Daylight at 50% with a 25px background blur.
-  tabBar: 'rgba(237, 246, 255, 0.5)',
+  // Menubar: Daylight at 50% with a 25px background blur. Nothing scrolls under the bar on Android, so
+  // it gets the colour that gives on the screen: solid Daylight, as on Figma's Favorites (1:15899).
+  tabBar: Platform.select({ android: Palette.daylight, default: 'rgba(237, 246, 255, 0.5)' }),
   // Type chip background: Midnight at 8%.
   chip: 'rgba(14, 9, 64, 0.08)',
   searchBar: Palette.white,
@@ -130,11 +131,11 @@ export const Fonts = {
   title: 'Rubik_700Bold',
 } as const;
 
-// Screen title ("All Pokémon", 1:5).
+// Screen title ("All Pokémon", 1:5, and "My favorites", 1:15078). Figma rounds its box to 29: 24 × 1.2.
 export const ScreenTitle = {
   fontFamily: Fonts.title,
   fontSize: FontSize.title,
-  lineHeight: FontSize.title * 1.2,
+  lineHeight: 29,
 } as const;
 
 // Not in Figma: feedback while a finger is on something tappable.
