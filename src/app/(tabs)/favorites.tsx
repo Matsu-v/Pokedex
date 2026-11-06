@@ -22,8 +22,6 @@ export default function FavoritesScreen() {
           title={TITLE}
           topGap={Spacing.four}
           onPressItem={(id) => router.push(`/pokemon/${id}`)}
-          // The options sheet is issue #13.
-          onOptionsPressItem={() => {}}
         />
       ) : (
         <>

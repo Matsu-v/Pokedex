@@ -34,8 +34,6 @@ export default function PokemonsScreen() {
           items={data}
           title="All Pokémon"
           onPressItem={(id) => router.push(`/pokemon/${id}`)}
-          // The options sheet is issue #13.
-          onOptionsPressItem={() => {}}
           onEndReached={loadMore}
           footer={
             hasNextPage ? (

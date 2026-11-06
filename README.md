@@ -24,4 +24,8 @@ Scan the QR code with Expo Go. Wi-Fi blocks it? `npx expo start --tunnel`.
 ```bash
 npx expo lint
 npx tsc --noEmit
+npm test
 ```
+
+The tests are in [`__tests__/`](./__tests__/), one file per feature. Each test names the acceptance criterion
+it checks. They need no phone and no network.

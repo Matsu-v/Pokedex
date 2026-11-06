@@ -17,7 +17,6 @@ type Props = {
   id: number;
   name: string;
   onPress: () => void;
-  onOptionsPress: () => void;
 };
 
 /**
@@ -40,10 +39,11 @@ function CardImage({ id }: { id: number }) {
 }
 
 /**
- * Pokecard from Figma (1:14698, Row variant): number badge, sprite, name and ⋮ button.
+ * Pokecard from Figma (1:14698, Row variant): number badge, sprite and name. Figma's ⋮ button is left
+ * out: it belongs to the options sheet, which was not built (#13), and a button needs an action.
  * Takes the width its parent gives it (`flex: 1`); the image stays square.
  */
-export function PokemonCard({ id, name, onPress, onOptionsPress }: Props) {
+export function PokemonCard({ id, name, onPress }: Props) {
   const theme = useTheme();
   const displayName = capitalize(name);
   const number = formatNumber(id);
@@ -64,21 +64,9 @@ export function PokemonCard({ id, name, onPress, onOptionsPress }: Props) {
       </View>
 
       <View style={styles.footer}>
-        <Text style={[styles.name, styles.footerName, { color: theme.text }]} numberOfLines={1}>
+        <Text style={[styles.name, { color: theme.text }]} numberOfLines={1}>
           {displayName}
         </Text>
-        <Pressable
-          onPress={onOptionsPress}
-          hitSlop={Card.iconHitSlop}
-          accessibilityRole="button"
-          accessibilityLabel={`Options for ${displayName}`}
-          style={({ pressed }) => pressed && styles.pressed}>
-          <Image
-            source={require('@/assets/images/icons/options.png')}
-            style={styles.icon}
-            tintColor={theme.text}
-          />
-        </Pressable>
       </View>
     </Pressable>
   );
@@ -179,17 +167,15 @@ const styles = StyleSheet.create({
   badgeInList: { alignSelf: 'flex-start' },
   badgeText: { fontFamily: Fonts.medium, fontSize: FontSize.badge },
   footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Card.padding,
+    minHeight: Card.footerHeight,
+    justifyContent: 'center',
+    paddingHorizontal: Card.padding,
   },
   name: {
     fontFamily: Fonts.medium,
     fontSize: FontSize.body,
     lineHeight: FontSize.body * Card.nameLineHeight,
   },
-  footerName: { flex: 1 },
-  icon: { width: Card.icon, height: Card.icon },
   listCard: {
     flexDirection: 'row',
     borderRadius: Radius.s,

@@ -21,8 +21,8 @@ One spec file per feature in `specs/features/`.
 4. [Favorites](./features/04-favorites.md): mark a Pokémon with the heart and find it back in the Favorites tab, also after a restart.
 5. [Compare](./features/06-compare.md): put two Pokémon side by side and see who wins per stat. This is the feature we design ourselves.
 
-Built only if there is time left, and moved here when it is: the [options sheet with Share](./optional/05-options-share.md)
-and the [collapsing header](./optional/detail-collapsing-header.md). Both are in Figma but not in appendix A.
+Not built: the [options sheet with Share](./optional/05-options-share.md) and the
+[collapsing header](./optional/detail-collapsing-header.md). Both are in Figma but not in appendix A.
 
 ## Data
 
@@ -32,6 +32,8 @@ and the [collapsing header](./optional/detail-collapsing-header.md). Both are in
   Images: built from the id, a sprite on cards and the artwork on Detail and Compare, see feature 01.
 - **Fetching**: TanStack Query. Every query has a loading and an error state on screen.
 - **Stored on the phone**: favourites in SQLite (`expo-sqlite`): columns `id`, `name`, `added_at`.
+- **Runs on**: Expo Go with SDK 58. The project moved from SDK 57 on the day of the hand-in, because
+  Expo Go in the stores now only opens the latest SDK.
 
 ## Technical choices
 
@@ -41,19 +43,19 @@ and the [collapsing header](./optional/detail-collapsing-header.md). Both are in
   well, so the Favorites list shows without network. API responses are not stored: TanStack Query
   caches those.
 - **Native feature**: haptics (`expo-haptics`), a light tap when you toggle the heart on Detail.
-  Alternative: Share, which is now part of the optional options sheet. Haptics, because the tap
+  Alternative: Share, which belonged to the options sheet that was not built. Haptics, because the tap
   confirms the one action that saves something, needs no permission and works in Expo Go.
 
 ## Technical core
 
-- [ ] Runs in Expo Go
-- [ ] Live data through TanStack Query
-- [ ] At least 2 screens with Expo Router
-- [ ] Favourites in SQLite that survive a restart
-- [ ] Loading and error state on every load
-- [ ] One native feature: haptics on the heart on Detail
-- [ ] TypeScript and ESLint without errors
-- [ ] UI, data and logic in separate files (see `AGENTS.md`)
+- [x] Runs in Expo Go
+- [x] Live data through TanStack Query
+- [x] At least 2 screens with Expo Router
+- [x] Favourites in SQLite that survive a restart
+- [x] Loading and error state on every load
+- [x] One native feature: haptics on the heart on Detail
+- [x] TypeScript and ESLint without errors
+- [x] UI, data and logic in separate files (see `AGENTS.md`)
 
 ## Optional
 
@@ -61,15 +63,15 @@ Ticked when built, +0.5 each.
 
 - [ ] Three different Reanimated animations, each with a purpose
 - [ ] Dark mode: every screen looks right, all colours from the theme
-- [ ] Pagination: page by page while you scroll, not all at once
-- [ ] Clean TypeScript: no `any`, no `as` casts, no `@ts-ignore`
+- [x] Pagination: page by page while you scroll, not all at once
+- [x] Clean TypeScript: no `any`, no `as` casts, no `@ts-ignore`
 - [ ] Localization: two languages
 - [ ] No warnings: no `console.log`, none in the terminal or on screen
 - [ ] Offline: works in airplane mode with the last data
-- [ ] Tests: one per feature on the logic, `npm test` passes
+- [x] Tests: one per feature on the logic, `npm test` passes
 - [ ] CI: lint and tsc on every push
 - [ ] Accessibility: button labels, largest text size
-- [ ] Optimistic update
+- [x] Optimistic update
 
 ## Out of scope
 

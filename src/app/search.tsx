@@ -47,14 +47,7 @@ export default function SearchScreen() {
     const results = filterPokemon(data, query);
     if (results.length === 0) return <MessageState message={`No Pokémon found for “${query}”`} />;
 
-    return (
-      <PokemonGrid
-        items={results}
-        onPressItem={openResult}
-        // The options sheet is issue #13.
-        onOptionsPressItem={() => {}}
-      />
-    );
+    return <PokemonGrid items={results} onPressItem={openResult} />;
   }
 
   return (

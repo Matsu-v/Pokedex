@@ -17,11 +17,12 @@ npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — re
 npx expo start              # start the dev server
 npx expo lint               # lint
 npx tsc --noEmit            # typecheck
+npm test                    # Jest, the tests in __tests__/
 npx expo-doctor             # diagnose dependency and config issues
 npx expo install --fix      # fix incompatible package versions
 ```
 
-Run lint and typecheck before declaring any task done.
+Run lint, typecheck and tests before declaring any task done.
 
 ## Navigation & Routing
 
@@ -57,6 +58,9 @@ code. No library that needs a development build.
 - `src/lib/`: pure functions (formatting, unit conversion, filtering, comparing). No React, no imports
   from `src/data/`.
 - `src/constants/theme.ts`: the only place for colours, spacing, radii, font sizes and fonts. No hex codes elsewhere.
+- `__tests__/`: one `<nn>-<feature>-test.tsx` per spec, not in `src/app/`, where a file becomes a route. A test is
+  named `AC: <criterion as in the spec>`, or `Constraint:` or `Rule:` for what the spec or this file asks elsewhere,
+  and says so when it only covers part of it. Only `fetch` and `expo-sqlite` are mocked.
 
 Shared setup is reused, never added a second time: API client `src/data/pokeapi.ts`, query client
 `src/data/query-client.ts`, database `src/data/db.ts`, loading, error and message states
@@ -67,8 +71,10 @@ Shared setup is reused, never added a second time: API client `src/data/pokeapi.
 (Row) and `PokemonListCard` (List) in `src/components/pokemon-card.tsx` (a card's image: `CardImage` there,
 which tries `cardImageUrls` in order; Detail and Compare use `artworkUrl`), the screen title with the space
 below it `GridTitle` in `src/components/pokemon-grid.tsx`, the top bar with back and the screen's own
-actions `TopBar` and `TopBarButton` in `src/components/detail-top-bar.tsx`. Anything new that other
-features will use gets a line here.
+actions `TopBar` and `TopBarButton` in `src/components/detail-top-bar.tsx`, in tests the query client and
+waiting `createQueryWrapper`, `dataOf` and `createGate` in `__tests__/helpers/query.tsx`, and the `fetch` mock
+and real Pokémon `mockPokeApi`, `routes` and the fixtures in `__tests__/helpers/pokeapi.ts`. Anything new that
+other features will use gets a line here.
 
 ## Rules
 
@@ -78,7 +84,7 @@ features will use gets a line here.
   states, including the Favorites list.
 - Types for API responses live in `src/data/pokeapi.ts`. No `any`, no `as` casts (`as const` is fine), no `@ts-ignore`, no `console.log`.
 - Fonts come from `Fonts` in `theme.ts`, loaded with Expo Font. The course's font is Rubik; no new font family without asking.
-- `npx expo lint` and `npx tsc --noEmit` must both be clean before a commit.
+- `npx expo lint`, `npx tsc --noEmit` and `npm test` must all be clean before a commit.
 - Add packages only with `npx expo install`, and only when the issue's plan names them.
 
 ## Figma
@@ -110,7 +116,7 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
    for the user to approve it in the chat.
 3. **Build** the task list, one item at a time, and tick off each task in that comment
    (`gh issue comment <n> --edit-last --body-file <file>`).
-4. **Check**: lint and typecheck clean; walk through every acceptance criterion of the issue and say
+4. **Check**: lint, typecheck and `npm test` clean; walk through every acceptance criterion of the issue and say
    per criterion how it was verified.
 5. **Explain** in the chat what changed and why, in a few lines, so the user can explain it too.
    When the user rejected or changed a suggestion, say so plainly: `docs/explanation.md` asks for one.
@@ -291,3 +297,11 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **In a hidden pane with an emulated size, screenshot coordinates are not CSS pixels:** the frame was 800x600 for a
   page of 390x800, and clicks on Detail's tabs read from it missed without an error. `ref` clicks use CSS pixels, so
   use those. The exception is the Home search bar: its `ref` centre lies under the web tab bar (see the lesson above).
+- **Jest in this project:** the script is `jest`, not the guide's `jest --watchAll`, which never exits. The test
+  `QueryClient` needs `gcTime: Infinity`: without it a finished mutation keeps a 5 minute timer open, and a run took
+  304 s instead of 4. Exclude `<rootDir>/.claude/`, otherwise `npm test` in the main checkout also runs every worktree.
+  The SQLite in the tests is a strict fake that knows our statements: it proves the logic around the SQL, not the SQL.
+- **Exporting a chat to this public repo:** the raw export holds the system prompt, every connected tool's name and all
+  reminders, so do not commit it as it is. Keep what was said and which tools ran, shorten paths, and search the result
+  for addresses, tokens and the local user name before the commit. A loaded skill and a finished background task arrive
+  as user messages, so label them apart from what Mats typed.
