@@ -266,6 +266,14 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   (first 24 bytes) gives the size without downloading the file.
 - **A failed `expo-image` does not try again by itself,** not after a re-render and not when the network returns,
   only with a new source or a new mount (Android keeps `loadedSource`, iOS reloads on a change of props or size).
+- **An optimistic target comes from the cache, not from the rendered value.** `onMutate` changes the cache before
+  the next tap can arrive, while the screen renders later (about 60 ms in a web export). With `!isFavorite` from
+  the render, two taps 17 ms apart both sent `remove`. Testing this: two `left_click`s in a `browser_batch` land
+  anywhere from 17 to 600 ms apart, a `double_click` about 3 ms, so read the times and do not assume the case ran.
+- **Testing an optimistic update on web:** a `MutationObserver` on `aria-label` logs every change of the heart with
+  its time, including a flash too short for a screenshot. Put a delay and a log in the repository with the temporary
+  `sessionStorage` switch. Open Detail by tapping a card: after `pushState` on a fresh page the tabs are not
+  mounted and back does nothing. Do not call a global test helper `status`: `window.status` is a string.
 - **Testing a failing image on web:** at runtime, wrap `HTMLImageElement.prototype.src` and `Element.prototype.setAttribute`
   so image URLs point to a dead address while a flag is on. In a search test, a letter that changes the results can
   change a row of the `FlatList` and so remount the card; a trailing space re-renders it without a remount.
