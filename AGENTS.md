@@ -269,3 +269,7 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Testing a failing image on web:** at runtime, wrap `HTMLImageElement.prototype.src` and `Element.prototype.setAttribute`
   so image URLs point to a dead address while a flag is on. In a search test, a letter that changes the results can
   change a row of the `FlatList` and so remount the card; a trailing space re-renders it without a remount.
+- **A green check on a fresh clone can still let things through.** `expo-env.d.ts` and `.expo/types` are git-ignored and
+  only `expo start` makes them, so without them `tsc` passes `<Link href="/does-not-exist">`. `npx expo customize tsconfig.json`
+  generates them without a prompt and leaves `tsconfig.json` as it is; CI runs it before `tsc`. `npx expo lint` exits 0 on
+  warnings, so CI adds `--max-warnings 0`. To test a CI step, give it a real fault and read the exit code.

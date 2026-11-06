@@ -1,0 +1,29 @@
+name: CI
+
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Lint
+        # expo lint exits 0 on warnings, and AGENTS.md asks for clean lint.
+        run: npx expo lint --max-warnings 0
+      - name: Generate route types
+        # Git-ignored and otherwise only made by expo start. Without them tsc passes a broken href.
+        run: npx expo customize tsconfig.json
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Test
+        # Skipped until package.json has a test script.
+        run: npm test --if-present
