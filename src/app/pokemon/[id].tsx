@@ -24,7 +24,7 @@ export default function PokemonDetailScreen() {
   const { data: pokemon, isPending, refetch } = usePokemon(Number(id));
   // One local row, no visible loading or error state: see the rule in AGENTS.md.
   const { data: isFavorite = false } = useIsFavorite(Number(id));
-  const { mutate: toggleFavorite } = useToggleFavorite();
+  const toggleFavorite = useToggleFavorite();
 
   return (
     <SafeAreaView edges={['top']} style={[styles.container, { backgroundColor: theme.background }]}>
