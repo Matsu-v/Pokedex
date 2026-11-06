@@ -304,4 +304,6 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Exporting a chat to this public repo:** the raw export holds the system prompt, every connected tool's name and all
   reminders, so do not commit it as it is. Keep what was said and which tools ran, shorten paths, and search the result
   for addresses, tokens and the local user name before the commit. A loaded skill and a finished background task arrive
-  as user messages, so label them apart from what Mats typed.
+  as user messages, so label them apart from what Mats typed. The other way round, a message Mats types while the agent
+  is working is an `attachment` of type `queued_command`, not a `user` entry: in the chat of #4 that was the one that
+  put the title back in Rubik. Filter before you shorten, otherwise a cut can leave half a reminder behind.
