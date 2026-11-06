@@ -301,3 +301,7 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   `QueryClient` needs `gcTime: Infinity`: without it a finished mutation keeps a 5 minute timer open, and a run took
   304 s instead of 4. Exclude `<rootDir>/.claude/`, otherwise `npm test` in the main checkout also runs every worktree.
   The SQLite in the tests is a strict fake that knows our statements: it proves the logic around the SQL, not the SQL.
+- **Exporting a chat to this public repo:** the raw export holds the system prompt, every connected tool's name and all
+  reminders, so do not commit it as it is. Keep what was said and which tools ran, shorten paths, and search the result
+  for addresses, tokens and the local user name before the commit. A loaded skill and a finished background task arrive
+  as user messages, so label them apart from what Mats typed.
