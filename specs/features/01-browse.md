@@ -17,9 +17,9 @@ in Figma, and taps one to open it.
   the large image on Detail and Compare), and without that to its Scarlet-Violet image
   (`versions/generation-ix/scarlet-violet/{id}.webp`). `onError` moves on, there is no list of ids.
 - `FlatList` with `numColumns={2}`. Loads the next page at `onEndReached`.
-- Card as in Figma: number badge (`001`, three digits, purple), sprite, name. The ⋮ button belongs
-  to the optional options sheet ([spec](../optional/05-options-share.md), #13). If that is not built
-  by the hand-in, the ⋮ is hidden: no button without an action.
+- Card as in Figma: number badge (`001`, three digits, purple), sprite, name. Figma's ⋮ button is hidden:
+  it belongs to the optional options sheet ([spec](../optional/05-options-share.md), #13), which was not
+  built, and there is no button without an action. The card keeps Figma's height of 211.
 - Title "All Pokémon", search bar on top that opens the Search screen (feature 02).
 - Colours, sizes and fonts only from `src/constants/theme.ts`. Fonts are loaded with Expo Font.
 

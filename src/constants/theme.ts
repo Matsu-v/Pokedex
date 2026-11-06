@@ -158,13 +158,12 @@ export const Button = {
 
 // Pokecard (1:14698), Row variant.
 export const Card = {
-  padding: 12, // footer around name and options icon
+  padding: 12, // left and right of the name, and in the list variant all around
+  // Figma's footer: 12 + its 24 high options icon + 12. The icon is hidden, the card stays 211 high.
+  footerHeight: 48,
   badgeOffset: 8, // badge from the top-left corner of the artwork
   badgePadding: { top: 4, bottom: 2, horizontal: 6 },
   nameLineHeight: 1.2,
-  icon: 24,
-  // Extra touch area around the 24px options icon, so the target is 44pt.
-  iconHitSlop: 10,
   pressedOpacity: PressedOpacity,
   // List variant (1:14699): the artwork sets the height of the card. Figma rounds the name's box to 19.
   listArtwork: 80,

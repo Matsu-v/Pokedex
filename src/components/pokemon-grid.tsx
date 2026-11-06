@@ -13,7 +13,6 @@ type Props = {
   /** Space above the first thing in the list: 32 on Home (1:835), 24 on Favorites (1:15077). */
   topGap?: number;
   onPressItem: (id: number) => void;
-  onOptionsPressItem: (id: number) => void;
   onEndReached?: () => void;
   footer?: ReactElement;
 };
@@ -24,7 +23,6 @@ export function PokemonGrid({
   title,
   topGap = Spacing.five,
   onPressItem,
-  onOptionsPressItem,
   onEndReached,
   footer,
 }: Props) {
@@ -38,12 +36,7 @@ export function PokemonGrid({
       keyExtractor={(cell) => (cell ? String(cell.id) : 'empty')}
       renderItem={({ item: cell }) =>
         cell ? (
-          <PokemonCard
-            id={cell.id}
-            name={cell.name}
-            onPress={() => onPressItem(cell.id)}
-            onOptionsPress={() => onOptionsPressItem(cell.id)}
-          />
+          <PokemonCard id={cell.id} name={cell.name} onPress={() => onPressItem(cell.id)} />
         ) : (
           <View style={styles.emptyCell} />
         )
