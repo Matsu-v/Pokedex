@@ -273,3 +273,10 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
   only `expo start` makes them, so without them `tsc` passes `<Link href="/does-not-exist">`. `npx expo customize tsconfig.json`
   generates them without a prompt and leaves `tsconfig.json` as it is; CI runs it before `tsc`. `npx expo lint` exits 0 on
   warnings, so CI adds `--max-warnings 0`. To test a CI step, give it a real fault and read the exit code.
+- **A run that fails in seconds without any steps never started.** The reason is in the annotations of plain
+  `gh run view <id>`, not in its `--log`. Here: the account was locked over a billing issue, also for this public repo. No
+  workflow change fixes that, and every push that contains the workflow gets a red cross until the lock is gone.
+- **Running CI's commands on Linux without a runner:** Debian under WSL has `node` but no `npm`, so `npx` falls through to
+  the Windows one and `expo lint`, which calls `npx eslint`, fails in `CMD.EXE`. That says nothing about the code. Take the
+  Windows paths off `PATH` and wrap `npm-cli.js` and `npx-cli.js` in small scripts. It proves file-name case and the Linux
+  binaries, on Debian's Node 20 instead of CI's 24.
