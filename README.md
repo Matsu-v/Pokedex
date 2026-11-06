@@ -10,6 +10,8 @@ built with Expo, Expo Router, TanStack Query and SQLite.
 
 ## Run
 
+Needs Node 22.13+, 24.3+ or 26+, the versions Expo SDK 58 supports.
+
 ```bash
 npm install
 npx expo start

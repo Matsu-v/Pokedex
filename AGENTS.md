@@ -277,3 +277,17 @@ colours, sizes and spacing into `theme.ts`, not into components. Ignore the Web,
 - **Testing a failing image on web:** at runtime, wrap `HTMLImageElement.prototype.src` and `Element.prototype.setAttribute`
   so image URLs point to a dead address while a flag is on. In a search test, a letter that changes the results can
   change a row of the `FlatList` and so remount the card; a trailing space re-renders it without a remount.
+- **Expo Go in the stores only supports the latest SDK.** When a new one ships, a project on the previous SDK gets
+  "project is incompatible" on scanning. `https://api.expo.dev/v2/versions/latest` gives `expoGoSdkVersion` and,
+  under `sdkVersions`, the client download per SDK (`androidClientUrl`, `iosClientUrl`). Check it before a hand-in.
+- **`expo install --fix` across an SDK can stop on `ERESOLVE`, while the new versions are fine.** Here npm refused
+  `expo-router` 58 because the old lockfile and `node_modules` still held `expo-symbols` 57. To tell the two apart,
+  resolve the new `package.json` in an empty folder with `npm install --package-lock-only`. If that works, take that
+  lockfile and run `npm ci`. Do not use `--force`: whoever clones the repo needs a plain `npm install` to work. A
+  fresh lockfile also moves everything else in its range, so hold a direct package you did not mean to change by
+  pinning it for the first run and restoring the range for a second (TanStack Query would have gone to 5.106). The
+  failed second round also leaves `@types/react` and `eslint-config-expo` behind, and `expo` keeps the literal
+  `^58.0.0`; set those by hand and confirm with `npx expo install --check`.
+- **In a hidden pane with an emulated size, screenshot coordinates are not CSS pixels:** the frame was 800x600 for a
+  page of 390x800, and clicks on Detail's tabs read from it missed without an error. `ref` clicks use CSS pixels, so
+  use those. The exception is the Home search bar: its `ref` centre lies under the web tab bar (see the lesson above).
